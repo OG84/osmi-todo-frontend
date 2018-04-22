@@ -3,12 +3,16 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MatButtonModule, MatSidenavModule, MatIconModule, MatMenuModule } from '@angular/material';
+import { MatButtonModule, MatSidenavModule, MatIconModule, MatMenuModule, MatListModule, MatToolbarModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { TodoListsComponent } from './todo-lists/todo-lists.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TodoListsComponent,
+    HomeComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -17,7 +21,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatSidenavModule,
     FlexLayoutModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    MatListModule,
+    MatToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
