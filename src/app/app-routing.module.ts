@@ -3,8 +3,19 @@ import { Routes, RouterModule, Params, RouterStateSnapshot } from '@angular/rout
 import { TodoListsComponent } from './todo-lists/todo-lists.component';
 import { HomeComponent } from './home/home.component';
 import { RouterReducerState, RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
+import { TodoListComponent } from './todo-list/todo-list.component';
 
 const routes: Routes = [
+  {
+    component: TodoListsComponent,
+    path: 'lists',
+    children: [
+      {
+        component: TodoListComponent,
+        path: ':todoListId'
+      }
+    ]
+  },
   {
     component: HomeComponent,
     path: '**'

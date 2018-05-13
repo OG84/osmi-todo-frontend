@@ -1,5 +1,8 @@
-<mat-list>
-  <mat-list-item> Todo list 1 </mat-list-item>
-  <mat-list-item> Todo list 2 </mat-list-item>
-  <mat-list-item> Todo list 3 </mat-list-item>
-</mat-list>
+<div class="todo-lists" fxLayout="column" fxLayoutAlign="center center">
+  <div class="todo-list-controls" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+    <div class="add-new-list" fxLayoutAlign="center center"><mat-icon>add</mat-icon>Neue Liste erstellen</div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,30 @@
+:host {
+    padding: 20px;
+
+    .todo-list-controls {
+        color: gray;
+        padding: 0 0 40px;
+
+        .add-new-list {
+            cursor: pointer;
+            padding: 0 20px;
+
+            &:hover {
+                color: black;
+            }
+
+            mat-icon {
+                width: 1em;
+                height: 1em;
+                font-size: 1em;
+                padding: 0 10px 0 0;
+            }
+        }
+
+        mat-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 80px;
+        }
+    }
+}

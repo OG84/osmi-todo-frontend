@@ -9,7 +9,9 @@ import {
   MatIconModule,
   MatMenuModule,
   MatListModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatInputModule,
+  MatCardModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TodoListsComponent } from './todo-lists/todo-lists.component';
@@ -20,6 +22,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { AppState } from 'src/app/app-state.model';
+import { TodoListComponent } from './todo-list/todo-list.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
@@ -30,6 +34,7 @@ export const reducers: ActionReducerMap<AppState> = {
   declarations: [
     AppComponent,
     TodoListsComponent,
+    TodoListComponent,
     HomeComponent
   ],
   imports: [
@@ -38,10 +43,13 @@ export const reducers: ActionReducerMap<AppState> = {
     MatButtonModule,
     MatSidenavModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
+    MatInputModule,
     MatIconModule,
     MatMenuModule,
     MatListModule,
     MatToolbarModule,
+    MatCardModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({
       maxAge: 25,

@@ -4,13 +4,13 @@
         "directive-selector": [
             true,
             "attribute",
-            "todo",
+            "osmi",
             "camelCase"
         ],
         "component-selector": [
             true,
             "element",
-            "todo",
+            "osmi",
             "kebab-case"
         ]
     }

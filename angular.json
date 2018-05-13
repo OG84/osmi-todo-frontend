@@ -6,7 +6,7 @@
     "osmi-todo-frontend": {
       "root": "",
       "projectType": "application",
-      "prefix": "todo",
+      "prefix": "osmi",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
