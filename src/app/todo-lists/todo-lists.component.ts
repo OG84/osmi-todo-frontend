@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { TodoList } from '../shared/todo-list.model';
+import { Router } from '@angular/router';
+import { Key } from 'protractor';
 
 @Component({
   selector: 'osmi-todo-lists',
@@ -7,21 +9,34 @@ import { TodoList } from '../shared/todo-list.model';
   styleUrls: ['./todo-lists.component.scss']
 })
 export class TodoListsComponent implements OnInit {
-
-  @Input()
-  isEditable = true;
-  todoLists: TodoList[];
-  isAdding = false;
-
-  constructor() { }
+  constructor(private readonly router: Router) { }
 
   ngOnInit() {
-    this.todoLists = this.createDummyLists();
+
   }
 
   addNewList(): void {
-    this.isAdding = true;
 
+  }
+
+  nextList(): void {
+    this.router.navigate(['/lists', 2]);
+  }
+
+  previousList(): void {
+    this.router.navigate(['/lists', 1]);
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  private keyUp(event: KeyboardEvent): void {
+    switch (event.keyCode) {
+      case 39:
+        this.nextList();
+        break;
+      case 37:
+        this.previousList();
+        break;
+    }
   }
 
   private createDummyLists(): TodoList[] {

@@ -2,12 +2,13 @@
     padding: 20px;
 
     .todo-list-controls {
-        color: gray;
+        color: rgba(0,0,0,0.1);
         padding: 0 0 40px;
 
         .add-new-list {
             cursor: pointer;
             padding: 0 20px;
+            color: rgba(0,0,0,0.6);
 
             &:hover {
                 color: black;
@@ -21,10 +22,15 @@
             }
         }
 
-        mat-icon {
-            width: 80px;
-            height: 80px;
-            font-size: 80px;
+        .next-list,
+        .previous-list {
+            cursor: pointer;
+
+            mat-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 80px;
+            }
         }
     }
 }
