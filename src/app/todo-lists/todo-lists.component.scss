@@ -10,6 +10,11 @@
             padding: 0 20px;
             color: rgba(0,0,0,0.6);
 
+            &.selected {
+                border: 2px dashed rgba(255, 0, 0, 0.5);
+                animation: pulsate 1s ease-out infinite;
+            }
+
             &:hover {
                 color: black;
             }
@@ -19,6 +24,19 @@
                 height: 1em;
                 font-size: 1em;
                 padding: 0 10px 0 0;
+            }
+        }
+        @keyframes pulsate {
+            0% {
+                border-color: rgba(255, 0, 0, 0.2);
+            }
+
+            50% {
+                border-color: rgba(255, 0, 0, 0.5);
+            }
+
+            100% {
+                border-color: rgba(255, 0, 0, 0.2);
             }
         }
 

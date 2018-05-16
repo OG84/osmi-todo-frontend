@@ -1,10 +1,14 @@
 :host {
-  .example-card {
-    max-width: 400px;
-  }
+    .example-card {
+        max-width: 400px;
+    }
 
-  .example-header-image {
-    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-    background-size: cover;
-  }
+    .example-header-image {
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvTLbbxJT8F8ctkr8Gm6NV77CwwLrKhRT1ep0PyEgVZyGFryhPxg');
+        background-size: cover;
+    }
+
+    .mat-card-title {
+        font-size: 1.2em;
+    }
 }

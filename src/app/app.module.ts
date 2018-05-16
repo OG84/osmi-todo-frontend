@@ -24,6 +24,8 @@ import { storeFreeze } from 'ngrx-store-freeze';
 import { AppState } from 'src/app/app-state.model';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TodoListsService } from './todo-lists/todo-lists.service';
+import { HttpClientModule } from '@angular/common/http';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
@@ -54,9 +56,12 @@ export const reducers: ActionReducerMap<AppState> = {
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
-    })
+    }),
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    TodoListsService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

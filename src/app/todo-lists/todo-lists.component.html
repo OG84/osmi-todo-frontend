@@ -1,8 +1,14 @@
-<div class="todo-lists" fxLayout="column" fxLayoutAlign="center center">
-  <div class="todo-list-controls" fxLayout="row" fxLayoutAlign="center center">
-    <div class="previous-list" (click)="previousList()"><mat-icon>keyboard_arrow_left</mat-icon></div>
-    <div class="add-new-list" fxLayoutAlign="center center" (click)="addNewList()"><mat-icon>add</mat-icon>Neue Liste erstellen</div>
-    <div class="next-list" (click)="nextList()"><mat-icon>keyboard_arrow_right</mat-icon></div>
+<div class="todo-list-controls" fxLayout="row" fxLayoutAlign="center center">
+  <div class="previous-list" (click)="previousList()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
   </div>
-  <router-outlet></router-outlet>
+  <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxLayoutAlign="center center" (click)="addNewList()">
+    <mat-icon>add</mat-icon>Neue Liste erstellen</div>
+  <div class="next-list" (click)="nextList()">
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+</div>
+
+<div class="todo-lists" fxLayout="column" fxLayoutAlign="center center">
+  <osmi-todo-list [todoList]="todoList" *ngFor="let todoList of todoLists | async"></osmi-todo-list>
 </div>

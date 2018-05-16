@@ -2,6 +2,8 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { TodoList } from '../shared/todo-list.model';
 import { Router } from '@angular/router';
 import { Key } from 'protractor';
+import { TodoListsService } from 'src/app/todo-lists/todo-lists.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'osmi-todo-lists',
@@ -9,10 +11,22 @@ import { Key } from 'protractor';
   styleUrls: ['./todo-lists.component.scss']
 })
 export class TodoListsComponent implements OnInit {
-  constructor(private readonly router: Router) { }
+  readonly LEFT_ARROW = 37;
+  readonly UP_ARROW = 38;
+  readonly RIGHT_ARROW = 39;
+  readonly DOWN_ARROW = 40;
+
+  isAddNewListSelected = true;
+  isKeyboardMode = false;
+
+  todoLists: Observable<TodoList[]>;
+
+  constructor(
+    private readonly router: Router,
+    private readonly todoListsService: TodoListsService) { }
 
   ngOnInit() {
-
+    this.todoLists = this.todoListsService.getAll();
   }
 
   addNewList(): void {
@@ -30,10 +44,10 @@ export class TodoListsComponent implements OnInit {
   @HostListener('document:keyup', ['$event'])
   private keyUp(event: KeyboardEvent): void {
     switch (event.keyCode) {
-      case 39:
+      case this.RIGHT_ARROW:
         this.nextList();
         break;
-      case 37:
+      case this.LEFT_ARROW:
         this.previousList();
         break;
     }
