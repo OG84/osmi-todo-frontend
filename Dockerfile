@@ -12,4 +12,4 @@ COPY --from=build-env /usr/app/nginx.conf /usr/local/nginx/conf
 COPY --from=build-env /usr/app/dist/osmi-todo-frontend .
 
 EXPOSE 80
-ENTRYPOINT [ "nginx", "-g", "deamon off" ]
+ENTRYPOINT [ "nginx", "-g", "'deamon off;'" ]
