@@ -8,7 +8,11 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build-prod": "ng build --configuration=production --prod",
+    "docker-build": "docker build -t todo-frontend .",
+    "docker-run": "docker run -d --rm --name todo-frontend -p 80:80 todo-frontend",
+    "docker-stop": "docker stop todo-frontend"
   },
   "private": true,
   "dependencies": {
