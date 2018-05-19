@@ -8,7 +8,7 @@ RUN yarn build-prod
 
 FROM nginx as runtime-env
 WORKDIR /usr/app
-COPY --from=build-env /usr/app/nginx.conf /usr/local/nginx/conf
+COPY --from=build-env /usr/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-env /usr/app/dist/osmi-todo-frontend .
 
 EXPOSE 80
