@@ -24,13 +24,20 @@ import { storeFreeze } from 'ngrx-store-freeze';
 import { AppState } from 'src/app/app-state.model';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { TodoListsService } from './todo-lists/todo-lists.service';
 import { HttpClientModule } from '@angular/common/http';
+import { todosReducer } from './shared/todos.reducer';
+import { TodosService } from './shared/todos.service';
+import { EffectsModule } from '@ngrx/effects';
+import { TodosEffects } from './shared/todos.effects';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
-  router: routerReducer
+  router: routerReducer,
+  todos: todosReducer
 };
+export const effects = [
+  TodosEffects
+];
 
 @NgModule({
   declarations: [
@@ -53,6 +60,7 @@ export const reducers: ActionReducerMap<AppState> = {
     MatToolbarModule,
     MatCardModule,
     StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
@@ -60,7 +68,7 @@ export const reducers: ActionReducerMap<AppState> = {
     HttpClientModule
   ],
   providers: [
-    TodoListsService
+    TodosService
   ],
   bootstrap: [AppComponent]
 })

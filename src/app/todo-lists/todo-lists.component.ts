@@ -2,8 +2,10 @@ import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { TodoList } from '../shared/todo-list.model';
 import { Router } from '@angular/router';
 import { Key } from 'protractor';
-import { TodoListsService } from 'src/app/todo-lists/todo-lists.service';
 import { Observable } from 'rxjs';
+import { TodosService } from '../shared/todos.service';
+import { Todo } from '../shared/todo.model';
+import { MatInput } from '@angular/material';
 
 @Component({
   selector: 'osmi-todo-lists',
@@ -19,18 +21,21 @@ export class TodoListsComponent implements OnInit {
   isAddNewListSelected = true;
   isKeyboardMode = false;
 
-  todoLists: Observable<TodoList[]>;
-
   constructor(
     private readonly router: Router,
-    private readonly todoListsService: TodoListsService) { }
+    private readonly todosService: TodosService) { }
 
   ngOnInit() {
-    this.todoLists = this.todoListsService.getAll();
+
   }
 
-  addNewList(): void {
+  get todoLists(): Observable<Todo[]> {
+    return this.todosService.todos;
+  }
 
+  addList(input: MatInput): void {
+    this.todosService.addTodo({ name: input.value });
+    input.value = '';
   }
 
   nextList(): void {
