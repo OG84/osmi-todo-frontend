@@ -1,14 +1,10 @@
 :host {
-    .example-card {
-        max-width: 400px;
-    }
+    .osmi-todo-list {
+      padding: 10px 0;
+      cursor: pointer;
 
-    .example-header-image {
-        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvTLbbxJT8F8ctkr8Gm6NV77CwwLrKhRT1ep0PyEgVZyGFryhPxg');
-        background-size: cover;
-    }
-
-    .mat-card-title {
-        font-size: 1.2em;
+      &:hover {
+        background-color: white;
+      }
     }
 }

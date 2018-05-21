@@ -1,13 +1,11 @@
 :host {
-    padding: 20px;
+    padding: 40px;
 
     .todo-list-controls {
         color: rgba(0,0,0,0.1);
-        padding: 0 0 40px;
 
         .add-new-list {
             cursor: pointer;
-            padding: 0 20px;
             color: rgba(0,0,0,0.6);
 
             &.selected {
@@ -50,5 +48,13 @@
                 font-size: 80px;
             }
         }
+    }
+
+    .todo-lists {
+      overflow: auto;
+    }
+
+    osmi-todo-list {
+
     }
 }

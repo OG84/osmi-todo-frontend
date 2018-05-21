@@ -1,17 +1,22 @@
-<div class="todo-list-controls" fxLayout="row">
-  <!--div class="previous-list" (click)="previousList()">
+<div fxLayout="column">
+  <div class="todo-list-controls" fxLayout="row">
+    <!--div class="previous-list" (click)="previousList()">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </div-->
-  <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
-    <mat-form-field fxFlex>
-      <input matInput placeholder="Neue Liste erstellen" value="" (keydown.enter)="addList($event.target)">
-    </mat-form-field>
-  </div>
-  <!--div class="next-list" (click)="nextList()">
+    <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
+      <mat-form-field fxFlex>
+        <input matInput placeholder="Neue Liste erstellen" value="" (keydown.enter)="addList($event.target)">
+      </mat-form-field>
+    </div>
+    <!--div class="next-list" (click)="nextList()">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </div-->
-</div>
+  </div>
 
-<div class="todo-lists" fxLayout="column" fxLayoutAlign="center center">
-  <osmi-todo-list [todoList]="todoList" *ngFor="let todoList of todoLists | async"></osmi-todo-list>
+  <div class="todo-lists" fxFlex>
+    <div *ngFor="let todoList of todoLists | async">
+      <osmi-todo-list [todoList]="todoList"></osmi-todo-list>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
 </div>
