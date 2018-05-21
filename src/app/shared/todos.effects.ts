@@ -8,7 +8,10 @@ import {
   TodosActionTypes,
   FetchAllSuccess,
   TodosAction,
-  FetchAllFailure
+  FetchAllFailure,
+  Upsert,
+  UpsertSuccess,
+  UpsertFailure
 } from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { Todo } from 'src/app/shared/todo.model';
@@ -18,6 +21,15 @@ export class TodosEffects {
   constructor(
     private readonly actions: Actions,
     private readonly http: HttpClient) { }
+
+  @Effect()
+  add: Observable<TodosAction> = this.actions.pipe(
+    ofType(TodosActionTypes.UPSERT),
+    mergeMap((action: Upsert) => this.http.post<Todo>(`${environment.apiBasePath}todos`, action.todo).pipe(
+      map(todo => new UpsertSuccess(todo)),
+      catchError(() => of(new UpsertFailure()))
+    ))
+  );
 
   @Effect()
   fetchAll: Observable<TodosAction> = this.actions.pipe(

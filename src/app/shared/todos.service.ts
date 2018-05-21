@@ -18,7 +18,7 @@ export class TodosService {
   }
 
   addTodo(todo: Todo): void {
-    this.store.dispatch(new fromTodos.Add(todo));
+    this.store.dispatch(new fromTodos.Upsert(todo));
   }
 
   get todos(): Observable<Todo[]> {

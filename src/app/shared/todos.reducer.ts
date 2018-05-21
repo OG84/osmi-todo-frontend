@@ -7,7 +7,7 @@ export const initialTodosState: TodosState = {
 
 export function todosReducer(state: TodosState = initialTodosState, action: TodosAction): TodosState {
   switch (action.type) {
-    case TodosActionTypes.ADD:
+    case TodosActionTypes.UPSERT_SUCCESS:
       return {
         ...state,
         todos: [...state.todos, action.todo]
