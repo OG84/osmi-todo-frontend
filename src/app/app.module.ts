@@ -12,7 +12,8 @@ import {
   MatToolbarModule,
   MatInputModule,
   MatCardModule,
-  MatDialogModule
+  MatDialogModule,
+  MatChipsModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TodoListsComponent } from './todo-lists/todo-lists.component';
@@ -63,6 +64,7 @@ export const effects = [
     MatToolbarModule,
     MatCardModule,
     MatDialogModule,
+    MatChipsModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({

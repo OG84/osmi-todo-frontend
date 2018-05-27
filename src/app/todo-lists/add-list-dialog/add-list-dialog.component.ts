@@ -22,7 +22,6 @@ export class AddListDialogComponent implements OnInit {
 
   addList(): void {
     const newListName = this.newListInput.nativeElement.value;
-    console.log(newListName);
 
     if (!newListName || newListName.trim() === '') {
       return;

@@ -5,8 +5,12 @@
   </div-->
     <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
       <mat-form-field fxFlexFill>
-        <input #newList matInput placeholder="Neue Liste erstellen" value="" (keydown.enter)="addList()">
+        <input #newList matInput placeholder="Name of the new list" value="" (keydown.enter)="addList()">
       </mat-form-field>
+    </div>
+    <div fxLayoutAlign="center center">
+      <button mat-button color="accent" (click)="addList()">
+        <mat-icon>add</mat-icon> add list</button>
     </div>
     <!--div class="next-list" (click)="nextList()">
     <mat-icon>keyboard_arrow_right</mat-icon>
@@ -19,5 +23,7 @@
       <mat-divider></mat-divider>
     </div>
   </div>
-  <button mat-fab color="accent" fxHide.gt-sm class="todo-mobile-add" (click)="openAddListDialog()"><mat-icon>add</mat-icon></button>
+  <button mat-fab color="accent" fxHide.gt-sm class="todo-mobile-add" (click)="openAddListDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>

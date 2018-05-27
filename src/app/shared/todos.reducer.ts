@@ -10,7 +10,7 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
     case TodosActionTypes.UPSERT_SUCCESS:
       return {
         ...state,
-        todos: [...state.todos, action.todo]
+        todos: [action.todo, ...state.todos]
       };
     case TodosActionTypes.FETCH_ALL_SUCCESS:
       return {
