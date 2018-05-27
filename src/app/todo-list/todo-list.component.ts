@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TodoList } from '../shared/todo-list.model';
+import { Todo } from '../shared/todo.model';
 import { Input } from '@angular/core';
+import { TodosService } from '../shared/todos.service';
 
 @Component({
   selector: 'osmi-todo-list',
@@ -10,9 +11,13 @@ import { Input } from '@angular/core';
 
 export class TodoListComponent implements OnInit {
   @Input()
-  todoList: TodoList;
+  todo: Todo;
 
-  constructor() { }
+  constructor(private readonly todosService: TodosService) { }
 
   ngOnInit() { }
+
+  deleteList(): void {
+    this.todosService.deleteTodo(this.todo.id);
+  }
 }

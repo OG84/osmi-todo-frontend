@@ -19,7 +19,7 @@
 
   <div class="todo-lists" fxFlexFill>
     <div *ngFor="let todoList of todoLists | async">
-      <osmi-todo-list [todoList]="todoList"></osmi-todo-list>
+      <osmi-todo-list [todo]="todoList"></osmi-todo-list>
       <mat-divider></mat-divider>
     </div>
   </div>

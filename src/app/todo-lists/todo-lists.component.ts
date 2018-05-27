@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { TodoList } from '../shared/todo-list.model';
+import { Todo } from '../shared/todo.model';
 import { Router } from '@angular/router';
 import { Key } from 'protractor';
 import { Observable } from 'rxjs';
 import { TodosService } from '../shared/todos.service';
-import { Todo } from '../shared/todo.model';
 import { MatInput, MatDialog } from '@angular/material';
 import { AddListDialogComponent } from './add-list-dialog/add-list-dialog.component';
 
@@ -72,42 +71,4 @@ export class TodoListsComponent implements OnInit {
         break;
     }
   }
-
-  private createDummyLists(): TodoList[] {
-    return [
-      {
-        id: '1',
-        name: 'list 1'
-      },
-      {
-        id: '2',
-        name: 'list 2',
-        todoLists: [
-          {
-            id: '11',
-            name: 'list 1.1'
-          },
-          {
-            id: '12',
-            name: 'list 1.2',
-            todoLists: [
-              {
-                id: '121',
-                name: 'list 1.2.1'
-              },
-              {
-                id: '122',
-                name: 'list 1.2.2'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: '3',
-        name: 'list 3'
-      }
-    ];
-  }
-
 }

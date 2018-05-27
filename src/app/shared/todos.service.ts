@@ -21,6 +21,10 @@ export class TodosService {
     this.store.dispatch(new fromTodos.Upsert(todo));
   }
 
+  deleteTodo(todoId: string): void {
+    this.store.dispatch(new fromTodos.Delete(todoId));
+  }
+
   get todos(): Observable<Todo[]> {
     return this.store.select(selectTodos);
   }

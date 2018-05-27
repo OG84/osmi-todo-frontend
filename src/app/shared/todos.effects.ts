@@ -11,7 +11,10 @@ import {
   FetchAllFailure,
   Upsert,
   UpsertSuccess,
-  UpsertFailure
+  UpsertFailure,
+  Delete,
+  DeleteSuccess,
+  DeleteFailure
 } from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { Todo } from 'src/app/shared/todo.model';
@@ -28,6 +31,15 @@ export class TodosEffects {
     mergeMap((action: Upsert) => this.http.post<Todo>(`${environment.apiBasePath}todos`, action.todo).pipe(
       map(todo => new UpsertSuccess(todo)),
       catchError(() => of(new UpsertFailure()))
+    ))
+  );
+
+  @Effect()
+  delete: Observable<TodosAction> = this.actions.pipe(
+    ofType(TodosActionTypes.DELETE),
+    mergeMap((action: Delete) => this.http.delete<Todo>(`${environment.apiBasePath}todos/${action.todoId}`).pipe(
+      map(() => new DeleteSuccess(action.todoId)),
+      catchError(() => of(new DeleteFailure(action.todoId)))
     ))
   );
 
