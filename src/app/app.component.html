@@ -3,11 +3,15 @@
     <button mat-icon-button (click)="sidenav.toggle()" fxHide.gt-sm>
       <mat-icon>menu</mat-icon>
     </button>
-    <div class="osmi-todo-toolbar-title"><span fxHide.lt-md>Thodo App - </span>{{toolbarTitle | async}}</div>
+    <div class="osmi-todo-toolbar-title" fxLayoutAlign="start center">
+      <span fxHide.lt-md>Thodo App - </span>{{toolbarTitle | async}}</div>
   </mat-toolbar>
   <mat-sidenav-container>
-    <mat-sidenav [mode]="sidenavMode" [opened]="!isMobile" #sidenav>
-      <!--osmi-todo-lists [isEditable]="false"></osmi-todo-lists-->
+    <mat-sidenav [mode]="sidenavMode" [opened]="!isMobile" #sidenav fxLayout="column">
+      <div class="osmi-todo-logo" fxLayoutAlign="center center">
+          <img src="assets/thodo-logo.svg">
+      </div>
+      <button mat-button fxLayoutAlign="start center" routerLink="lists" (click)="closeSidenav()">Manage Lists</button>
     </mat-sidenav>
     <mat-sidenav-content>
       <router-outlet></router-outlet>

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
 import { filter } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { ToolbarService } from './toolbar/toolbar.service';
 import { Observable } from 'rxjs';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'osmi-todo-root',
@@ -11,6 +12,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+
+  @ViewChild('sidenav')
+  sidenav: MatSidenav;
 
   isMobile = false;
   sidenavMode = 'side';
@@ -29,5 +33,13 @@ export class AppComponent implements OnInit {
       this.isMobile = x.mqAlias === 'xs' || x.mqAlias === 'sm';
       this.sidenavMode = this.isMobile ? 'over' : 'side';
     });
+  }
+
+  closeSidenav(): void {
+    if (!this.isMobile) {
+      return;
+    }
+
+    this.sidenav.close();
   }
 }
