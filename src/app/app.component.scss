@@ -1,5 +1,16 @@
 :host {
     mat-sidenav {
         width: 300px;
+        background-color: antiquewhite;
+    }
+
+    mat-toolbar {
+      min-height: 64px;
+    }
+
+    mat-sidenav-content {
+      padding: 40px;
+      height: calc(100vh - 144px);
+      overflow: auto;
     }
 }

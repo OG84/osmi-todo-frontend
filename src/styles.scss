@@ -3,17 +3,11 @@
 body,
 html {
     font-family: 'Open Sans', sans-serif;
-    width: 100%;
-    height: 100%;
-    display: flex;
     margin: 0;
     padding: 0;
     color: rgba(0,0,0,0.6);
 }
 
 todo-root {
-    display: flex;
-    flex: 1 1 auto;
-
     font-size: 1.5rem;
 }

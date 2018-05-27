@@ -4,7 +4,7 @@
     <mat-icon>keyboard_arrow_left</mat-icon>
   </div-->
     <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
-      <mat-form-field fxFlex>
+      <mat-form-field fxFlexFill>
         <input matInput placeholder="Neue Liste erstellen" value="" (keydown.enter)="addList($event.target)">
       </mat-form-field>
     </div>
@@ -13,7 +13,7 @@
   </div-->
   </div>
 
-  <div class="todo-lists" fxFlex>
+  <div class="todo-lists" fxFlexFill>
     <div *ngFor="let todoList of todoLists | async">
       <osmi-todo-list [todoList]="todoList"></osmi-todo-list>
       <mat-divider></mat-divider>
