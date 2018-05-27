@@ -1,7 +1,7 @@
 <div class="osmi-todo-list" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-  <mat-checkbox>{{todo.name}}</mat-checkbox>
+  <mat-checkbox [checked]="todo.isSelected" (change)="select($event)">{{todo.name}}</mat-checkbox>
   <div fxFlex></div>
-  <button mat-icon-button color="accent" (click)="deleteList()">
+  <button mat-icon-button color="accent" (click)="deleteList()" fxHide.lt-md>
     <mat-icon aria-label="delete list">delete</mat-icon>
   </button>
   <mat-chip-list fxLayoutAlign="end center">

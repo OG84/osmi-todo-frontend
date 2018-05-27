@@ -33,7 +33,7 @@ import { todosReducer } from './shared/todos.reducer';
 import { TodosService } from './shared/todos.service';
 import { EffectsModule } from '@ngrx/effects';
 import { TodosEffects } from './shared/todos.effects';
-import { AddListDialogComponent } from './todo-lists/add-list-dialog/add-list-dialog.component';
+import { EnterNameDialogComponent } from './todo-lists/enter-name-dialog/enter-name-dialog.component';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
@@ -50,7 +50,7 @@ export const effects = [
     TodoListsComponent,
     TodoListComponent,
     HomeComponent,
-    AddListDialogComponent
+    EnterNameDialogComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -58,6 +58,7 @@ export const effects = [
     MatButtonModule,
     MatSidenavModule,
     FlexLayoutModule,
+    FormsModule,
     ReactiveFormsModule,
     MatInputModule,
     MatIconModule,
@@ -81,7 +82,7 @@ export const effects = [
     TodosService
   ],
   entryComponents: [
-    AddListDialogComponent
+    EnterNameDialogComponent
   ],
   bootstrap: [AppComponent]
 })

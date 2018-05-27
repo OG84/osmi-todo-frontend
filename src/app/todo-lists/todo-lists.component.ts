@@ -5,7 +5,8 @@ import { Key } from 'protractor';
 import { Observable } from 'rxjs';
 import { TodosService } from '../shared/todos.service';
 import { MatInput, MatDialog } from '@angular/material';
-import { AddListDialogComponent } from './add-list-dialog/add-list-dialog.component';
+import { filter, first } from 'rxjs/operators';
+import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
 
 @Component({
   selector: 'osmi-todo-lists',
@@ -20,6 +21,9 @@ export class TodoListsComponent implements OnInit {
 
   isAddNewListSelected = true;
   isKeyboardMode = false;
+  isSelectionActive = false;
+  isSingleSelectionActive = false;
+  isListEmpty = false;
 
   @ViewChild('newList')
   newListInput: ElementRef;
@@ -30,10 +34,17 @@ export class TodoListsComponent implements OnInit {
     private readonly dialog: MatDialog) { }
 
   ngOnInit() {
+    this.todos.subscribe(x => {
+      this.isListEmpty = x.length === 0;
+    });
 
+    this.todosService.selectedTodos.subscribe(x => {
+      this.isSelectionActive = x.length > 0;
+      this.isSingleSelectionActive = x.length === 1;
+    });
   }
 
-  get todoLists(): Observable<Todo[]> {
+  get todos(): Observable<Todo[]> {
     return this.todosService.todos;
   }
 
@@ -49,7 +60,45 @@ export class TodoListsComponent implements OnInit {
   }
 
   openAddListDialog(): void {
-    const dialogRef = this.dialog.open(AddListDialogComponent);
+    const dialogRef = this.dialog.open(EnterNameDialogComponent);
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (!dialogResult) {
+        return;
+      }
+      this.todosService.addTodo({ name: dialogResult.name });
+    });
+  }
+
+  deleteSelected(): void {
+    this.todosService.selectedTodos.pipe(
+      first()
+    ).subscribe(x => x.forEach(todo => this.todosService.deleteTodo(todo.id)));
+  }
+
+  editSelected(): void {
+    this.todosService.selectedTodos.pipe(
+      first()
+    ).subscribe(x => {
+      if (x.length === 0) {
+        return;
+      }
+
+      const selectedTodo = x[0];
+      const dialogRef = this.dialog.open(EnterNameDialogComponent, { data: { name: selectedTodo.name } });
+      dialogRef.afterClosed().subscribe(dialogResult => {
+        if (!dialogResult) {
+          return;
+        }
+
+        const updatedTodo: Todo = {
+          id: selectedTodo.id,
+          isSelected: selectedTodo.isSelected,
+          todos: selectedTodo.todos,
+          name: dialogResult.name
+        };
+        this.todosService.updateTodo(updatedTodo);
+      });
+    });
   }
 
   nextList(): void {

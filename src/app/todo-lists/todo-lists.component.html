@@ -1,16 +1,24 @@
 <div fxLayout="column">
-  <div class="todo-list-controls" fxLayout="row" fxHide.lt-md>
+  <div class="osmi-todo-controls" fxLayout="column">
     <!--div class="previous-list" (click)="previousList()">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </div-->
-    <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
-      <mat-form-field fxFlexFill>
-        <input #newList matInput placeholder="Name of the new list" value="" (keydown.enter)="addList()">
-      </mat-form-field>
+    <div class="osmi-todo-control" fxLayout="row" fxHide.lt-md>
+      <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
+        <mat-form-field fxFlexFill>
+          <input #newList matInput placeholder="Name of the new list" value="" (keydown.enter)="addList()">
+        </mat-form-field>
+      </div>
+      <div fxLayoutAlign="center center">
+        <button mat-stroked-button color="accent" (click)="addList()">
+          <mat-icon>add</mat-icon> add list</button>
+      </div>
     </div>
-    <div fxLayoutAlign="center center">
-      <button mat-button color="accent" (click)="addList()">
-        <mat-icon>add</mat-icon> add list</button>
+    <div class="osmi-todo-control">
+      <button class="osmi-todo-control-action" mat-stroked-button color="accent" [disabled]="!isSelectionActive" (click)="deleteSelected()">
+        <mat-icon>delete</mat-icon> delete</button>
+      <button class="osmi-todo-control-action" mat-stroked-button color="accent" [disabled]="!isSingleSelectionActive" (click)="editSelected()">
+        <mat-icon>edit</mat-icon> edit</button>
     </div>
     <!--div class="next-list" (click)="nextList()">
     <mat-icon>keyboard_arrow_right</mat-icon>
@@ -18,12 +26,20 @@
   </div>
 
   <div class="todo-lists" fxFlexFill>
-    <div *ngFor="let todoList of todoLists | async">
+    <div *ngFor="let todoList of todos | async">
       <osmi-todo-list [todo]="todoList"></osmi-todo-list>
       <mat-divider></mat-divider>
     </div>
+    <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+      <mat-icon>list</mat-icon>
+      <span>This place looks empty</span>
+      <span class="small-hint">Add some lists to get started</span>
+    </div>
   </div>
-  <button mat-fab color="accent" fxHide.gt-sm class="todo-mobile-add" (click)="openAddListDialog()">
-    <mat-icon>add</mat-icon>
-  </button>
+  <div fxHide.gt-sm>
+    <img class="osmi-todo-arrow" src="assets/curved-arrow.png" *ngIf="isListEmpty">
+    <button mat-fab color="accent" class="todo-mobile-add" (click)="openAddListDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>

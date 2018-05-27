@@ -8,6 +8,7 @@ export enum TodosActionTypes {
   DELETE = '[todos] delete',
   DELETE_SUCCESS = '[todos] delete success',
   DELETE_FAILURE = '[todos] delete failure',
+  SELECT = '[todos] select',
   FETCH_ALL = '[todos] fetch all',
   FETCH_ALL_SUCCESS = '[todos] fetch all success',
   FETCH_ALL_FAILURE = '[todos] fetch all failure'
@@ -61,6 +62,12 @@ export class FetchAllFailure implements Action {
   readonly type = TodosActionTypes.FETCH_ALL_FAILURE;
 }
 
+export class Select implements Action {
+  readonly type = TodosActionTypes.SELECT;
+
+  constructor(public todo: Todo, public isSelected: boolean) { }
+}
+
 export type TodosAction = Upsert |
   UpsertSuccess |
   UpsertFailure |
@@ -69,4 +76,5 @@ export type TodosAction = Upsert |
   DeleteFailure |
   FetchAll |
   FetchAllSuccess |
-  FetchAllFailure;
+  FetchAllFailure |
+  Select;

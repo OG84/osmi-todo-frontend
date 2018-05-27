@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Todo } from '../shared/todo.model';
 import { Input } from '@angular/core';
 import { TodosService } from '../shared/todos.service';
+import { MatCheckboxChange } from '@angular/material';
 
 @Component({
   selector: 'osmi-todo-list',
@@ -19,5 +20,9 @@ export class TodoListComponent implements OnInit {
 
   deleteList(): void {
     this.todosService.deleteTodo(this.todo.id);
+  }
+
+  select(checkboxChange: MatCheckboxChange): void {
+    this.todosService.selectTodo(this.todo, checkboxChange.checked);
   }
 }

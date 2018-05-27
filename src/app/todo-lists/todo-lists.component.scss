@@ -1,10 +1,19 @@
 :host {
-    .todo-list-controls {
+    .osmi-todo-controls {
         color: rgba(0,0,0,0.1);
+
+        .osmi-todo-control {
+            padding: 0 0 10px;
+
+            .osmi-todo-control-action {
+                margin: 0 10px 0 0;
+            }
+        }
 
         .add-new-list {
             cursor: pointer;
             color: rgba(0,0,0,0.6);
+            margin: 0 10px 0 0;
 
             &.selected {
                 border: 2px dashed rgba(255, 0, 0, 0.5);
@@ -48,9 +57,31 @@
         }
     }
 
-    .todo-mobile-add {
+    .osmi-todo-arrow {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 12px;
+      right: 65px;
+    }
+
+    .todo-mobile-add {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .osmi-todo-empty-list {
+        padding: 20px 0 0;
+        color: rgba(0,0,0,0.2);
+        text-align: center;
+
+        .small-hint {
+          font-size: 0.8em;
+        }
+
+        mat-icon {
+            width: 150px;
+            height: 150px;
+            font-size: 150px;
+        }
     }
 }

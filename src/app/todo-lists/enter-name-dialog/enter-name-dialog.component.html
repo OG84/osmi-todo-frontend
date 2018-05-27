@@ -1,0 +1,7 @@
+<div fxLayout="column">
+  <mat-form-field fxFlexFill>
+    <input matInput placeholder="Name of the list" [(ngModel)]="todoName" (keydown.enter)="ok()">
+  </mat-form-field>
+  <button mat-button color="accent" (click)="ok()">
+    <mat-icon>check</mat-icon> okay</button>
+</div>
