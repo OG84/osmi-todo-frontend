@@ -14,7 +14,7 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
       const isNewTodo = !state.todos.some(x => x.id === action.todo.id);
 
       if (isNewTodo) {
-        newTodos = [action.todo, ...newTodos];
+        newTodos = [action.todo, ...state.todos];
       } else {
         newTodos = [...state.todos];
         const indexOfExisting = newTodos.findIndex(x => x.id === action.todo.id);

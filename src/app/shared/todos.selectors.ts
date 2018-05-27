@@ -3,4 +3,4 @@ import { createSelector } from '@ngrx/store';
 
 const selectTodosState = (state: AppState) => state.todos;
 export const selectTodos = createSelector(selectTodosState, x => x.todos);
-export const selectSelectedTodos = createSelector(selectTodosState, x => x.todos.filter(todo => todo.isSelected));
+export const selectSelectedTodos = createSelector(selectTodos, x => x.filter(todo => todo.isSelected));
