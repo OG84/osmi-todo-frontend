@@ -72,7 +72,7 @@ export class TodoListsComponent implements OnInit {
   deleteSelected(): void {
     this.todosService.selectedTodos.pipe(
       first()
-    ).subscribe(x => x.forEach(todo => this.todosService.deleteTodo(todo.id)));
+    ).subscribe(x => x.forEach(todo => this.todosService.deleteTodo(todo._id)));
   }
 
   editSelected(): void {
@@ -91,7 +91,7 @@ export class TodoListsComponent implements OnInit {
         }
 
         const updatedTodo: Todo = {
-          id: selectedTodo.id,
+          _id: selectedTodo._id,
           isSelected: selectedTodo.isSelected,
           todos: selectedTodo.todos,
           name: dialogResult.name

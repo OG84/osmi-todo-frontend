@@ -1,5 +1,5 @@
 export interface Todo {
-  id?: string;
+  _id?: string;
   name: string;
   todos?: Todo[];
   isSelected?: boolean;

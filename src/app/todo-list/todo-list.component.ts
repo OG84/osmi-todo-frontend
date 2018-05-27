@@ -19,7 +19,7 @@ export class TodoListComponent implements OnInit {
   ngOnInit() { }
 
   deleteList(): void {
-    this.todosService.deleteTodo(this.todo.id);
+    this.todosService.deleteTodo(this.todo._id);
   }
 
   select(checkboxChange: MatCheckboxChange): void {
