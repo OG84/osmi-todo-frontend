@@ -11,7 +11,8 @@ import {
   MatListModule,
   MatToolbarModule,
   MatInputModule,
-  MatCardModule
+  MatCardModule,
+  MatDialogModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TodoListsComponent } from './todo-lists/todo-lists.component';
@@ -29,6 +30,7 @@ import { todosReducer } from './shared/todos.reducer';
 import { TodosService } from './shared/todos.service';
 import { EffectsModule } from '@ngrx/effects';
 import { TodosEffects } from './shared/todos.effects';
+import { AddListDialogComponent } from './todo-lists/add-list-dialog/add-list-dialog.component';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
@@ -44,7 +46,8 @@ export const effects = [
     AppComponent,
     TodoListsComponent,
     TodoListComponent,
-    HomeComponent
+    HomeComponent,
+    AddListDialogComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -59,6 +62,7 @@ export const effects = [
     MatListModule,
     MatToolbarModule,
     MatCardModule,
+    MatDialogModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({
@@ -69,6 +73,9 @@ export const effects = [
   ],
   providers: [
     TodosService
+  ],
+  entryComponents: [
+    AddListDialogComponent
   ],
   bootstrap: [AppComponent]
 })

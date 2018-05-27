@@ -1,7 +1,7 @@
-<div fxLayout="column" fxFlexFill>
+<div fxLayout="column" fxFlexFill [ngClass.lt-md]="'mobile'">
   <mat-toolbar color="primary">
       <button mat-icon-button (click)="sidenav.toggle()" fxHide.gt-sm><mat-icon>menu</mat-icon></button>
-      OSMI Todo App
+      Listen verwalten
     </mat-toolbar>
   <mat-sidenav-container>
     <mat-sidenav [mode]="sidenavMode" [opened]="!isMobile" #sidenav>
