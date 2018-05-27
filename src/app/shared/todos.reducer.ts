@@ -27,6 +27,8 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
       };
     case TodosActionTypes.DELETE_SUCCESS:
       newTodos = state.todos.filter(x => x._id !== action.todoId);
+      console.log(state.todos);
+
       return {
         ...state,
         todos: newTodos

@@ -3,6 +3,7 @@ import { Todo } from '../shared/todo.model';
 import { Input } from '@angular/core';
 import { TodosService } from '../shared/todos.service';
 import { MatCheckboxChange } from '@angular/material';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'osmi-todo-list',

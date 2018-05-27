@@ -7,6 +7,7 @@ import { TodosService } from '../shared/todos.service';
 import { MatInput, MatDialog } from '@angular/material';
 import { filter, first } from 'rxjs/operators';
 import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
+import { ToolbarService } from '../toolbar/toolbar.service';
 
 @Component({
   selector: 'osmi-todo-lists',
@@ -31,9 +32,12 @@ export class TodoListsComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly todosService: TodosService,
-    private readonly dialog: MatDialog) { }
+    private readonly dialog: MatDialog,
+    private readonly toolbarService: ToolbarService) { }
 
   ngOnInit() {
+    this.toolbarService.setTitle('Manage Lists');
+
     this.todos.subscribe(x => {
       this.isListEmpty = x.length === 0;
     });

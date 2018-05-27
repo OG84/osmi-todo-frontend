@@ -1,8 +1,10 @@
 <div fxLayout="column" fxFlexFill [ngClass.lt-md]="'mobile'">
   <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()" fxHide.gt-sm><mat-icon>menu</mat-icon></button>
-      Listen verwalten
-    </mat-toolbar>
+    <button mat-icon-button (click)="sidenav.toggle()" fxHide.gt-sm>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="osmi-todo-toolbar-title"><span fxHide.lt-md>Thodo App - </span>{{toolbarTitle | async}}</div>
+  </mat-toolbar>
   <mat-sidenav-container>
     <mat-sidenav [mode]="sidenavMode" [opened]="!isMobile" #sidenav>
       <!--osmi-todo-lists [isEditable]="false"></osmi-todo-lists-->
