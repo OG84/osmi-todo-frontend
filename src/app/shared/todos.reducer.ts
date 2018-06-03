@@ -3,7 +3,9 @@ import { TodosAction, TodosActionTypes } from './todos.actions';
 import { Todo } from './todo.model';
 
 export const initialTodosState: TodosState = {
-  todos: []
+  todos: [],
+  listInputValue: '',
+  isListInputShaking: false
 };
 
 export function todosReducer(state: TodosState = initialTodosState, action: TodosAction): TodosState {
@@ -27,7 +29,6 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
       };
     case TodosActionTypes.DELETE_SUCCESS:
       newTodos = state.todos.filter(x => x._id !== action.todoId);
-      console.log(state.todos);
 
       return {
         ...state,
@@ -51,6 +52,21 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
       return {
         ...state,
         todos: newTodos
+      };
+    case TodosActionTypes.LIST_INPUT_VALUE_CHANGED:
+      return {
+        ...state,
+        listInputValue: action.value
+      };
+    case TodosActionTypes.LIST_INPUT_SHAKING_START:
+      return {
+        ...state,
+        isListInputShaking: true
+      };
+    case TodosActionTypes.LIST_INPUT_SHAKING_STOP:
+      return {
+        ...state,
+        isListInputShaking: false
       };
     default:
       return state;

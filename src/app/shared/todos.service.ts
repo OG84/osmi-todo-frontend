@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../app-state.model';
 import { Observable } from 'rxjs';
 import { Todo } from './todo.model';
-import { selectTodos, selectSelectedTodos } from './todos.selectors';
+import { selectTodos, selectSelectedTodos, selectIsListInputShaking, selectListInputValue } from './todos.selectors';
 import * as fromTodos from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -39,6 +39,18 @@ export class TodosService {
 
   get selectedTodos(): Observable<Todo[]> {
     return this.store.select(selectSelectedTodos);
+  }
+
+  get listInputValue(): Observable<string> {
+    return this.store.select(selectListInputValue);
+  }
+
+  get isListInputShaking(): Observable<boolean> {
+    return this.store.select(selectIsListInputShaking);
+  }
+
+  updateListInputValue(value: string): void {
+    this.store.dispatch(new fromTodos.ListInputValueChanged(value));
   }
 
   private fetchAll(): void {

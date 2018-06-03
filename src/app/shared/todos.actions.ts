@@ -11,7 +11,10 @@ export enum TodosActionTypes {
   SELECT = '[todos] select',
   FETCH_ALL = '[todos] fetch all',
   FETCH_ALL_SUCCESS = '[todos] fetch all success',
-  FETCH_ALL_FAILURE = '[todos] fetch all failure'
+  FETCH_ALL_FAILURE = '[todos] fetch all failure',
+  LIST_INPUT_SHAKING_START = '[todos] list input shaking start',
+  LIST_INPUT_SHAKING_STOP = '[todos] list input shaking stop',
+  LIST_INPUT_VALUE_CHANGED = '[todos] list input value changed'
 }
 
 export class Upsert implements Action {
@@ -68,6 +71,20 @@ export class Select implements Action {
   constructor(public todo: Todo, public isSelected: boolean) { }
 }
 
+export class ListInputShakingStart implements Action {
+  readonly type = TodosActionTypes.LIST_INPUT_SHAKING_START;
+}
+
+export class ListInputShakingStop implements Action {
+  readonly type = TodosActionTypes.LIST_INPUT_SHAKING_STOP;
+}
+
+export class ListInputValueChanged implements Action {
+  readonly type = TodosActionTypes.LIST_INPUT_VALUE_CHANGED;
+
+  constructor(public value: string) { }
+}
+
 export type TodosAction = Upsert |
   UpsertSuccess |
   UpsertFailure |
@@ -77,4 +94,7 @@ export type TodosAction = Upsert |
   FetchAll |
   FetchAllSuccess |
   FetchAllFailure |
-  Select;
+  Select |
+  ListInputShakingStart |
+  ListInputShakingStop |
+  ListInputValueChanged;

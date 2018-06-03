@@ -8,6 +8,9 @@ import { MatInput, MatDialog } from '@angular/material';
 import { filter, first } from 'rxjs/operators';
 import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
 import { ToolbarService } from '../toolbar/toolbar.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../app-state.model';
+import { ListInputValueChanged } from '../shared/todos.actions';
 
 @Component({
   selector: 'osmi-todo-lists',
@@ -33,7 +36,8 @@ export class TodoListsComponent implements OnInit {
     private readonly router: Router,
     private readonly todosService: TodosService,
     private readonly dialog: MatDialog,
-    private readonly toolbarService: ToolbarService) { }
+    private readonly toolbarService: ToolbarService,
+    private readonly store: Store<AppState>) { }
 
   ngOnInit() {
     this.toolbarService.setTitle('Manage Lists');
@@ -52,6 +56,18 @@ export class TodoListsComponent implements OnInit {
     return this.todosService.todos;
   }
 
+  get listInputValue(): Observable<string> {
+    return this.todosService.listInputValue;
+  }
+
+  get isListInputShaking(): Observable<boolean> {
+    return this.todosService.isListInputShaking;
+  }
+
+  updateListInputValue(value: string): void {
+    this.todosService.updateListInputValue(value);
+  }
+
   addList(): void {
     const newListName = this.newListInput.nativeElement.value;
 
@@ -60,7 +76,6 @@ export class TodoListsComponent implements OnInit {
     }
 
     this.todosService.addTodo({ name: newListName });
-    this.newListInput.nativeElement.value = '';
   }
 
   openAddListDialog(): void {

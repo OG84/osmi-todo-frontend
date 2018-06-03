@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
+import { Observable, of, timer } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
 import {
   FetchAll,
@@ -14,16 +14,22 @@ import {
   UpsertFailure,
   Delete,
   DeleteSuccess,
-  DeleteFailure
+  DeleteFailure,
+  ListInputShakingStart,
+  ListInputShakingStop,
+  ListInputValueChanged
 } from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { Todo } from 'src/app/shared/todo.model';
+import { AppState } from '../app-state.model';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class TodosEffects {
   constructor(
     private readonly actions: Actions,
-    private readonly http: HttpClient) { }
+    private readonly http: HttpClient,
+    private readonly store: Store<AppState>) { }
 
   @Effect()
   add: Observable<TodosAction> = this.actions.pipe(
@@ -50,5 +56,21 @@ export class TodosEffects {
       map(todos => new FetchAllSuccess(todos)),
       catchError(() => of(new FetchAllFailure()))
     ))
+  );
+
+  @Effect()
+  upsertSuccess: Observable<TodosAction> = this.actions.pipe(
+    ofType(TodosActionTypes.UPSERT_SUCCESS),
+    map(x => new ListInputValueChanged(''))
+  );
+
+  @Effect()
+  psertFailure: Observable<TodosAction> = this.actions.pipe(
+    ofType(TodosActionTypes.UPSERT_FAILURE),
+    map(action => {
+      timer(1000).subscribe(x => this.store.dispatch(new ListInputShakingStop()));
+
+      return new ListInputShakingStart();
+    })
   );
 }

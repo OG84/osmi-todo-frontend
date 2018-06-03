@@ -84,4 +84,21 @@
             font-size: 150px;
         }
     }
+
+    .shaking{
+      color: red;
+      animation: shaking 0.2s infinite;
+    }
+
+    @keyframes shaking {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(10px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
 }
