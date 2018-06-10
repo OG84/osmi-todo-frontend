@@ -14,6 +14,8 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
   switch (action.type) {
     case TodosActionTypes.UPSERT_SUCCESS:
       const isNewTodo = !state.todos.some(x => x._id === action.todo._id);
+      console.log(isNewTodo, action.todo);
+
 
       if (isNewTodo) {
         newTodos = [action.todo, ...state.todos];

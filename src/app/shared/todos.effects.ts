@@ -32,7 +32,7 @@ export class TodosEffects {
     private readonly store: Store<AppState>) { }
 
   @Effect()
-  add: Observable<TodosAction> = this.actions.pipe(
+  upsert: Observable<TodosAction> = this.actions.pipe(
     ofType(TodosActionTypes.UPSERT),
     mergeMap((action: Upsert) => this.http.post<Todo>(`${environment.apiBasePath}todos`, action.todo).pipe(
       map(todo => new UpsertSuccess(todo)),

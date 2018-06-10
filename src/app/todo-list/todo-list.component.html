@@ -1,13 +1,18 @@
 <div class="osmi-todo-list" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-  <mat-checkbox [checked]="todo?.isSelected" (change)="select($event)">{{todo?.name}}</mat-checkbox>
-  <div fxFlex></div>
-  <button mat-icon-button color="accent" (click)="editList()" fxHide.lt-md>
+  <div *ngIf="!isEditing" fxFlex>{{todo?.name}}</div>
+  <mat-form-field *ngIf="isEditing" fxFlex>
+    <input #nameInput matInput placeholder="Name of the list" [(ngModel)]="name" (keyup.enter)="updateList()" autofocus>
+  </mat-form-field>
+  <button mat-icon-button color="accent" (click)="editList()" *ngIf="!isEditing">
     <mat-icon aria-label="edit list">edit</mat-icon>
   </button>
-  <button mat-icon-button color="accent" (click)="deleteList()" fxHide.lt-md>
+  <button mat-icon-button color="accent" (click)="deleteList()" *ngIf="!isEditing">
     <mat-icon aria-label="delete list">delete</mat-icon>
   </button>
-  <mat-chip-list fxLayoutAlign="end center">
+  <button mat-icon-button color="accent" *ngIf="isEditing" (click)="updateList()">
+    <mat-icon aria-label="delete list">check</mat-icon>
+  </button>
+  <!--mat-chip-list fxLayoutAlign="end center">
     <mat-chip matTooltip="open tasks">0</mat-chip>
-  </mat-chip-list>
+  </mat-chip-list-->
 </div>
