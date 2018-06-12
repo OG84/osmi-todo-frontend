@@ -1,11 +1,18 @@
-import { Component, OnInit, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  HostListener,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { Todo } from '../shared/todo.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'protractor';
-import { Observable } from 'rxjs';
+import { Observable, EMPTY, Subject, combineLatest } from 'rxjs';
 import { TodosService } from '../shared/todos.service';
 import { MatInput, MatDialog } from '@angular/material';
-import { filter, first } from 'rxjs/operators';
+import { filter, first, map, tap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
 import { ToolbarService } from '../toolbar/toolbar.service';
 import { Store } from '@ngrx/store';
@@ -29,11 +36,15 @@ export class TodoListsComponent implements OnInit {
   isSingleSelectionActive = false;
   isListEmpty = false;
 
+  todos: Observable<Todo[]>;
+  parentTodoId: string;
+
   @ViewChild('newList')
   newListInput: ElementRef;
 
   constructor(
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly todosService: TodosService,
     private readonly dialog: MatDialog,
     private readonly toolbarService: ToolbarService,
@@ -42,18 +53,31 @@ export class TodoListsComponent implements OnInit {
   ngOnInit() {
     this.toolbarService.setTitle('Manage Lists');
 
-    this.todos.subscribe(x => {
-      this.isListEmpty = x.length === 0;
-    });
-
     this.todosService.selectedTodos.subscribe(x => {
       this.isSelectionActive = x.length > 0;
       this.isSingleSelectionActive = x.length === 1;
     });
-  }
 
-  get todos(): Observable<Todo[]> {
-    return this.todosService.todos;
+    this.route.params.subscribe(x =>  this.parentTodoId = x.todoId);
+
+    this.todos = combineLatest(
+      this.route.params,
+      this.todosService.todos).pipe(
+        map(([params, todos]) => {
+          const todoIdRouteParam = params.todoId;
+
+          if (!todoIdRouteParam) {
+            return todos;
+          }
+
+          const parentTodo = this.findTodoById(todos, todoIdRouteParam);
+          console.log(todoIdRouteParam, parentTodo);
+          return parentTodo.todos;
+        }));
+
+    this.todos.subscribe(x => {
+      this.isListEmpty = !x || x.length === 0;
+    });
   }
 
   get listInputValue(): Observable<string> {
@@ -75,7 +99,10 @@ export class TodoListsComponent implements OnInit {
       return;
     }
 
-    this.todosService.addTodo({ name: newListName });
+    console.log(this.parentTodoId);
+
+    const newTodo: Todo = { name: newListName, todos: [] };
+    this.todosService.upsertTodo(newTodo, this.parentTodoId);
   }
 
   openAddListDialog(): void {
@@ -84,7 +111,7 @@ export class TodoListsComponent implements OnInit {
       if (!dialogResult) {
         return;
       }
-      this.todosService.addTodo({ name: dialogResult.name });
+      this.todosService.upsertTodo({ name: dialogResult.name });
     });
   }
 
@@ -138,5 +165,20 @@ export class TodoListsComponent implements OnInit {
         this.previousList();
         break;
     }
+  }
+
+  private findTodoById(todos: Todo[], id: string): Todo {
+    for (const todo of todos) {
+      if (todo._id === id) {
+        return todo;
+      }
+
+      const childTodo = this.findTodoById(todo.todos, id);
+      if (childTodo) {
+        return childTodo;
+      }
+    }
+
+    return null;
   }
 }

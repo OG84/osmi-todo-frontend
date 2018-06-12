@@ -3,7 +3,7 @@ import { TodosAction, TodosActionTypes } from './todos.actions';
 import { Todo } from './todo.model';
 
 export const initialTodosState: TodosState = {
-  todos: [],
+  todos: null,
   listInputValue: '',
   isListInputShaking: false
 };
@@ -12,10 +12,8 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
   let newTodos: Todo[];
 
   switch (action.type) {
-    case TodosActionTypes.UPSERT_SUCCESS:
+    case TodosActionTypes.UPSERT_ROOT_SUCCESS:
       const isNewTodo = !state.todos.some(x => x._id === action.todo._id);
-      console.log(isNewTodo, action.todo);
-
 
       if (isNewTodo) {
         newTodos = [action.todo, ...state.todos];
@@ -24,6 +22,20 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
         const indexOfExisting = newTodos.findIndex(x => x._id === action.todo._id);
         newTodos[indexOfExisting] = action.todo;
       }
+
+      return {
+        ...state,
+        todos: newTodos
+      };
+    case TodosActionTypes.UPSERT_CHILD_SUCCESS:
+      newTodos = [...state.todos];
+
+      const existingRootIndex = newTodos.findIndex(x => x._id === action.upsertedRootTodo._id);
+      if (existingRootIndex === -1) {
+        newTodos.push(action.upsertedRootTodo);
+      }
+
+      newTodos[existingRootIndex] = action.upsertedRootTodo;
 
       return {
         ...state,
@@ -73,4 +85,19 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
     default:
       return state;
   }
+}
+
+function findTodoById(todos: Todo[], id: string): Todo {
+  for (const todo of todos) {
+    if (todo._id === id) {
+      return todo;
+    }
+
+    const childTodo = this.findTodoById(todo.todos, id);
+    if (childTodo) {
+      return childTodo;
+    }
+  }
+
+  return null;
 }

@@ -7,6 +7,7 @@ import { selectTodos, selectSelectedTodos, selectIsListInputShaking, selectListI
 import * as fromTodos from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { skip } from 'rxjs/operators';
 
 @Injectable()
 export class TodosService {
@@ -17,8 +18,13 @@ export class TodosService {
     this.fetchAll();
   }
 
-  addTodo(todo: Todo): void {
-    this.store.dispatch(new fromTodos.Upsert(todo));
+  upsertTodo(todo: Todo, parentTodoId?: string): void {
+    if (parentTodoId) {
+      this.store.dispatch(new fromTodos.UpsertChild(todo, parentTodoId));
+      return;
+    }
+
+    this.store.dispatch(new fromTodos.UpsertRoot(todo));
   }
 
   deleteTodo(todoId: string): void {
@@ -26,7 +32,7 @@ export class TodosService {
   }
 
   updateTodo(todo: Todo): void {
-    this.store.dispatch(new fromTodos.Upsert(todo));
+    this.store.dispatch(new fromTodos.UpsertRoot(todo));
   }
 
   selectTodo(todo: Todo, isSelected: boolean): void {
@@ -34,7 +40,7 @@ export class TodosService {
   }
 
   get todos(): Observable<Todo[]> {
-    return this.store.select(selectTodos);
+    return this.store.select(selectTodos).pipe(skip(1));
   }
 
   get selectedTodos(): Observable<Todo[]> {

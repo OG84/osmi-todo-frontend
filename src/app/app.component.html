@@ -14,9 +14,9 @@
       <button mat-button fxLayoutAlign="start center" routerLink="lists" (click)="closeSidenav()">Manage Lists</button>
     </mat-sidenav>
     <mat-sidenav-content>
-      <button mat-stroked-button color="accent" (click)="sidenav.toggle()" *ngIf="sidenav.opened" fxHide.lt-sm>
+      <button mat-stroked-button color="primary" (click)="sidenav.toggle()" *ngIf="sidenav.opened" fxHide.lt-sm>
         <mat-icon>arrow_left</mat-icon> Close menu</button>
-      <button mat-stroked-button color="accent" (click)="sidenav.toggle()" *ngIf="!sidenav.opened" fxHide.lt-sm>
+      <button mat-stroked-button color="primary" (click)="sidenav.toggle()" *ngIf="!sidenav.opened" fxHide.lt-sm>
         <mat-icon>arrow_right</mat-icon> Open menu</button>
       <router-outlet></router-outlet>
     </mat-sidenav-content>

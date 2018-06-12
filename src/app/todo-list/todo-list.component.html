@@ -1,5 +1,5 @@
 <div class="osmi-todo-list" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-  <div *ngIf="!isEditing" fxFlex>{{todo?.name}}</div>
+  <div *ngIf="!isEditing" fxFlex [routerLink]="['/lists', todo._id]">{{todo?.name}}</div>
   <mat-form-field *ngIf="isEditing" fxFlex>
     <input #nameInput matInput placeholder="Name of the list" [(ngModel)]="name" (keyup.enter)="updateList()" autofocus>
   </mat-form-field>

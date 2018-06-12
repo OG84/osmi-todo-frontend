@@ -14,20 +14,20 @@
           <mat-icon>add</mat-icon> add list</button>
       </div>
     </div>
-    <div class="osmi-todo-control">
+    <!--div class="osmi-todo-control">
       <button class="osmi-todo-control-action" mat-stroked-button color="accent" [disabled]="!isSelectionActive" (click)="deleteSelected()">
         <mat-icon>delete</mat-icon> delete</button>
       <button class="osmi-todo-control-action" mat-stroked-button color="accent" [disabled]="!isSingleSelectionActive" (click)="editSelected()">
         <mat-icon>edit</mat-icon> edit</button>
-    </div>
+    </div-->
     <!--div class="next-list" (click)="nextList()">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </div-->
   </div>
 
   <div class="todo-lists" fxFlexFill>
-    <div *ngFor="let todoList of todos | async">
-      <osmi-todo-list [todo]="todoList"></osmi-todo-list>
+    <div *ngFor="let todo of todos | async">
+      <osmi-todo-list [todo]="todo"></osmi-todo-list>
       <mat-divider></mat-divider>
     </div>
     <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlexFill fxLayoutAlign="center center">

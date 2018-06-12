@@ -2,9 +2,12 @@ import { Action } from '@ngrx/store';
 import { Todo } from './todo.model';
 
 export enum TodosActionTypes {
-  UPSERT = '[todos] upsert',
-  UPSERT_SUCCESS = '[todos] upsert success',
-  UPSERT_FAILURE = '[todos] upsert failure',
+  UPSERT_ROOT = '[todos] upsert root',
+  UPSERT_ROOT_SUCCESS = '[todos] upsert root success',
+  UPSERT_ROOT_FAILURE = '[todos] upsert root failure',
+  UPSERT_CHILD = '[todos] upsert child',
+  UPSERT_CHILD_SUCCESS = '[todos] upsert child success',
+  UPSERT_CHILD_FAILURE = '[todos] upsert child failure',
   DELETE = '[todos] delete',
   DELETE_SUCCESS = '[todos] delete success',
   DELETE_FAILURE = '[todos] delete failure',
@@ -17,20 +20,37 @@ export enum TodosActionTypes {
   LIST_INPUT_VALUE_CHANGED = '[todos] list input value changed'
 }
 
-export class Upsert implements Action {
-  readonly type = TodosActionTypes.UPSERT;
+export class UpsertRoot implements Action {
+  readonly type = TodosActionTypes.UPSERT_ROOT;
 
   constructor(public todo: Todo) { }
 }
 
-export class UpsertSuccess implements Action {
-  readonly type = TodosActionTypes.UPSERT_SUCCESS;
+export class UpsertRootSuccess implements Action {
+  readonly type = TodosActionTypes.UPSERT_ROOT_SUCCESS;
 
   constructor(public todo: Todo) { }
 }
 
-export class UpsertFailure implements Action {
-  readonly type = TodosActionTypes.UPSERT_FAILURE;
+export class UpsertRootFailure implements Action {
+  readonly type = TodosActionTypes.UPSERT_ROOT_FAILURE;
+}
+
+
+export class UpsertChild implements Action {
+  readonly type = TodosActionTypes.UPSERT_CHILD;
+
+  constructor(public todo: Todo, public parentTodoId: string) { }
+}
+
+export class UpsertChildSuccess implements Action {
+  readonly type = TodosActionTypes.UPSERT_CHILD_SUCCESS;
+
+  constructor(public upsertedRootTodo: Todo) { }
+}
+
+export class UpsertChildFailure implements Action {
+  readonly type = TodosActionTypes.UPSERT_CHILD_FAILURE;
 }
 
 export class Delete implements Action {
@@ -85,9 +105,12 @@ export class ListInputValueChanged implements Action {
   constructor(public value: string) { }
 }
 
-export type TodosAction = Upsert |
-  UpsertSuccess |
-  UpsertFailure |
+export type TodosAction = UpsertRoot |
+  UpsertRootSuccess |
+  UpsertRootFailure |
+  UpsertChild |
+  UpsertChildSuccess |
+  UpsertChildFailure |
   Delete |
   DeleteSuccess |
   DeleteFailure |
