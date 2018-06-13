@@ -36,15 +36,19 @@ import { TodosEffects } from './shared/todos.effects';
 import { EnterNameDialogComponent } from './todo-lists/enter-name-dialog/enter-name-dialog.component';
 import { toolbarReducer } from 'src/app/toolbar/toolbar.reducer';
 import { ToolbarService } from './toolbar/toolbar.service';
+import { todoListsReducer } from './todo-lists/todo-lists.reducer';
+import { TodoListsEffects } from './todo-lists/todo-lists.effects';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
   router: routerReducer,
   todos: todosReducer,
+  todoLists: todoListsReducer,
   toolbar: toolbarReducer
 };
 export const effects = [
-  TodosEffects
+  TodosEffects,
+  TodoListsEffects
 ];
 
 @NgModule({

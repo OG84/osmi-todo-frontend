@@ -15,12 +15,11 @@ export class TodosService {
     private readonly store: Store<AppState>,
     private readonly http: HttpClient) {
 
-    this.fetchAll();
   }
 
-  upsertTodo(todo: Todo, parentTodoId?: string): void {
-    if (parentTodoId) {
-      this.store.dispatch(new fromTodos.UpsertChild(todo, parentTodoId));
+  upsertTodo(todo: Todo, parentTodo?: Todo): void {
+    if (parentTodo) {
+      this.store.dispatch(new fromTodos.UpsertChild(todo, parentTodo._id));
       return;
     }
 
@@ -55,11 +54,41 @@ export class TodosService {
     return this.store.select(selectIsListInputShaking);
   }
 
+  createUrlSaveString(input: string): string {
+    return input.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  }
+
   updateListInputValue(value: string): void {
     this.store.dispatch(new fromTodos.ListInputValueChanged(value));
   }
 
-  private fetchAll(): void {
-    this.store.dispatch(new fromTodos.FetchAll());
+  findTodoById(todos: Todo[], id: string): Todo {
+    for (const todo of todos) {
+      if (todo._id === id) {
+        return todo;
+      }
+
+      const childTodo = this.findTodoById(todo.todos, id);
+      if (childTodo) {
+        return childTodo;
+      }
+    }
+
+    return null;
+  }
+
+  findTodoByUrlSaveName(todos: Todo[], urlSaveName: string): Todo {
+    for (const todo of todos) {
+      if (todo.urlSaveName === urlSaveName) {
+        return todo;
+      }
+
+      const childTodo = this.findTodoByUrlSaveName(todo.todos, urlSaveName);
+      if (childTodo) {
+        return childTodo;
+      }
+    }
+
+    return null;
   }
 }

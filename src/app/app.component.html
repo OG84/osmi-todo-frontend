@@ -11,13 +11,14 @@
       <div class="osmi-todo-logo" fxLayoutAlign="center center">
         <img src="assets/thodo-logo.svg">
       </div>
-      <button mat-button fxLayoutAlign="start center" routerLink="lists" (click)="closeSidenav()">Manage Lists</button>
+      <button mat-button color="primary" fxLayoutAlign="start center" routerLink="lists" (click)="closeSidenav()">
+          <mat-icon>list</mat-icon> Manage Lists</button>
+      <button mat-button color="primary" fxLayoutAlign="start center" (click)="sidenav.toggle()" *ngIf="sidenav.opened" fxHide.lt-sm>
+          <mat-icon>arrow_left</mat-icon> Close menu</button>
+        <button mat-button color="primary" (click)="sidenav.toggle()" *ngIf="!sidenav.opened" fxHide.lt-sm>
+          <mat-icon>arrow_right</mat-icon> Open menu</button>
     </mat-sidenav>
     <mat-sidenav-content>
-      <button mat-stroked-button color="primary" (click)="sidenav.toggle()" *ngIf="sidenav.opened" fxHide.lt-sm>
-        <mat-icon>arrow_left</mat-icon> Close menu</button>
-      <button mat-stroked-button color="primary" (click)="sidenav.toggle()" *ngIf="!sidenav.opened" fxHide.lt-sm>
-        <mat-icon>arrow_right</mat-icon> Open menu</button>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

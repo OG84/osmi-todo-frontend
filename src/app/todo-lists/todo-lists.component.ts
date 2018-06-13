@@ -9,7 +9,7 @@ import {
 import { Todo } from '../shared/todo.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'protractor';
-import { Observable, EMPTY, Subject, combineLatest } from 'rxjs';
+import { Observable, EMPTY, Subject, combineLatest, of } from 'rxjs';
 import { TodosService } from '../shared/todos.service';
 import { MatInput, MatDialog } from '@angular/material';
 import { filter, first, map, tap, switchMap, withLatestFrom } from 'rxjs/operators';
@@ -18,6 +18,7 @@ import { ToolbarService } from '../toolbar/toolbar.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app-state.model';
 import { ListInputValueChanged } from '../shared/todos.actions';
+import * as fromTodoLists from './todo-lists.selectors';
 
 @Component({
   selector: 'osmi-todo-lists',
@@ -37,7 +38,7 @@ export class TodoListsComponent implements OnInit {
   isListEmpty = false;
 
   todos: Observable<Todo[]>;
-  parentTodoId: string;
+  todo: Todo;
 
   @ViewChild('newList')
   newListInput: ElementRef;
@@ -58,22 +59,8 @@ export class TodoListsComponent implements OnInit {
       this.isSingleSelectionActive = x.length === 1;
     });
 
-    this.route.params.subscribe(x =>  this.parentTodoId = x.todoId);
-
-    this.todos = combineLatest(
-      this.route.params,
-      this.todosService.todos).pipe(
-        map(([params, todos]) => {
-          const todoIdRouteParam = params.todoId;
-
-          if (!todoIdRouteParam) {
-            return todos;
-          }
-
-          const parentTodo = this.findTodoById(todos, todoIdRouteParam);
-          console.log(todoIdRouteParam, parentTodo);
-          return parentTodo.todos;
-        }));
+    this.todos = this.store.select(fromTodoLists.selectTodoLists);
+    this.store.select(fromTodoLists.selectTodo).subscribe(x => this.todo = x);
 
     this.todos.subscribe(x => {
       this.isListEmpty = !x || x.length === 0;
@@ -94,15 +81,12 @@ export class TodoListsComponent implements OnInit {
 
   addList(): void {
     const newListName = this.newListInput.nativeElement.value;
-
     if (!newListName || newListName.trim() === '') {
       return;
     }
 
-    console.log(this.parentTodoId);
-
     const newTodo: Todo = { name: newListName, todos: [] };
-    this.todosService.upsertTodo(newTodo, this.parentTodoId);
+    this.todosService.upsertTodo(newTodo, this.todo);
   }
 
   openAddListDialog(): void {
@@ -165,20 +149,5 @@ export class TodoListsComponent implements OnInit {
         this.previousList();
         break;
     }
-  }
-
-  private findTodoById(todos: Todo[], id: string): Todo {
-    for (const todo of todos) {
-      if (todo._id === id) {
-        return todo;
-      }
-
-      const childTodo = this.findTodoById(todo.todos, id);
-      if (childTodo) {
-        return childTodo;
-      }
-    }
-
-    return null;
   }
 }

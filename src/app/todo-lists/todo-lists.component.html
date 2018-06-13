@@ -1,12 +1,16 @@
 <div fxLayout="column">
   <div class="osmi-todo-controls" fxLayout="column">
-    <!--div class="previous-list" (click)="previousList()">
-    <mat-icon>keyboard_arrow_left</mat-icon>
-  </div-->
+    <div class="backlinks osmi-todo-control">
+      <button mat-stroked-button color="primary" [routerLink]="['/lists', todo?.parent?._id]" fxHide.lt-sm *ngIf="todo?.parent">
+        <mat-icon>arrow_left</mat-icon> Back to {{todo?.parent?.name}}</button>
+      <button mat-stroked-button color="primary" [routerLink]="['/lists']" fxHide.lt-sm *ngIf="todo && !todo.parent">
+        <mat-icon>arrow_left</mat-icon> Back to overview</button>
+    </div>
     <div class="osmi-todo-control" fxLayout="row" fxHide.lt-md>
       <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
         <mat-form-field fxFlexFill>
-          <input #newList matInput placeholder="Name of the new list" [value]="listInputValue | async" (input)="updateListInputValue($event.target.value)" (keydown.enter)="addList()" [class.shaking]="isListInputShaking | async">
+          <input #newList matInput placeholder="Name of the new list" [value]="listInputValue | async" (input)="updateListInputValue($event.target.value)"
+            (keydown.enter)="addList()" [class.shaking]="isListInputShaking | async">
         </mat-form-field>
       </div>
       <div fxLayoutAlign="center center">
@@ -14,15 +18,6 @@
           <mat-icon>add</mat-icon> add list</button>
       </div>
     </div>
-    <!--div class="osmi-todo-control">
-      <button class="osmi-todo-control-action" mat-stroked-button color="accent" [disabled]="!isSelectionActive" (click)="deleteSelected()">
-        <mat-icon>delete</mat-icon> delete</button>
-      <button class="osmi-todo-control-action" mat-stroked-button color="accent" [disabled]="!isSingleSelectionActive" (click)="editSelected()">
-        <mat-icon>edit</mat-icon> edit</button>
-    </div-->
-    <!--div class="next-list" (click)="nextList()">
-    <mat-icon>keyboard_arrow_right</mat-icon>
-  </div-->
   </div>
 
   <div class="todo-lists" fxFlexFill>
