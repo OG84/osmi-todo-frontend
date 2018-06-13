@@ -3,7 +3,12 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../app-state.model';
 import { Observable } from 'rxjs';
 import { Todo } from './todo.model';
-import { selectTodos, selectSelectedTodos, selectIsListInputShaking, selectListInputValue } from './todos.selectors';
+import {
+  selectTodos,
+  selectSelectedTodos,
+  selectIsListInputShaking,
+  selectListInputValue
+} from './todos.selectors';
 import * as fromTodos from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -17,21 +22,12 @@ export class TodosService {
 
   }
 
-  upsertTodo(todo: Todo, parentTodo?: Todo): void {
-    if (parentTodo) {
-      this.store.dispatch(new fromTodos.UpsertChild(todo, parentTodo._id));
-      return;
-    }
-
-    this.store.dispatch(new fromTodos.UpsertRoot(todo));
+  upsertTodo(todo: Todo): void {
+    this.store.dispatch(new fromTodos.Upsert(todo));
   }
 
-  deleteTodo(todoId: string): void {
-    this.store.dispatch(new fromTodos.Delete(todoId));
-  }
-
-  updateTodo(todo: Todo): void {
-    this.store.dispatch(new fromTodos.UpsertRoot(todo));
+  deleteTodo(todo: Todo): void {
+    this.store.dispatch(new fromTodos.Delete(todo));
   }
 
   selectTodo(todo: Todo, isSelected: boolean): void {
@@ -40,10 +36,6 @@ export class TodosService {
 
   get todos(): Observable<Todo[]> {
     return this.store.select(selectTodos).pipe(skip(1));
-  }
-
-  get selectedTodos(): Observable<Todo[]> {
-    return this.store.select(selectSelectedTodos);
   }
 
   get listInputValue(): Observable<string> {
@@ -55,7 +47,16 @@ export class TodosService {
   }
 
   createUrlSaveString(input: string): string {
+    if (!input) {
+      return input;
+    }
+
     return input.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  }
+
+  createTodosWithOutParents(todo: Todo): Todo {
+    const todoWithoutParents = JSON.stringify(todo, (key, val) => key === 'parent' ? null : val);
+    return JSON.parse(todoWithoutParents);
   }
 
   updateListInputValue(value: string): void {

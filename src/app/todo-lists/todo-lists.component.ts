@@ -54,11 +54,6 @@ export class TodoListsComponent implements OnInit {
   ngOnInit() {
     this.toolbarService.setTitle('Manage Lists');
 
-    this.todosService.selectedTodos.subscribe(x => {
-      this.isSelectionActive = x.length > 0;
-      this.isSingleSelectionActive = x.length === 1;
-    });
-
     this.todos = this.store.select(fromTodoLists.selectTodoLists);
     this.store.select(fromTodoLists.selectTodo).subscribe(x => this.todo = x);
 
@@ -85,8 +80,20 @@ export class TodoListsComponent implements OnInit {
       return;
     }
 
-    const newTodo: Todo = { name: newListName, todos: [] };
-    this.todosService.upsertTodo(newTodo, this.todo);
+    const newTodo: Todo = { name: newListName, todos: [], parentId: this.todo ? this.todo._id : null };
+    console.log('upsert', newTodo);
+
+    this.todosService.upsertTodo(newTodo);
+  }
+
+  upsertTodo(todo: Todo): void {
+    console.log('upsert by event', todo);
+
+    this.todosService.upsertTodo(todo);
+  }
+
+  deleteTodo(todo: Todo): void {
+    this.todosService.deleteTodo(todo);
   }
 
   openAddListDialog(): void {
@@ -96,38 +103,6 @@ export class TodoListsComponent implements OnInit {
         return;
       }
       this.todosService.upsertTodo({ name: dialogResult.name });
-    });
-  }
-
-  deleteSelected(): void {
-    this.todosService.selectedTodos.pipe(
-      first()
-    ).subscribe(x => x.forEach(todo => this.todosService.deleteTodo(todo._id)));
-  }
-
-  editSelected(): void {
-    this.todosService.selectedTodos.pipe(
-      first()
-    ).subscribe(x => {
-      if (x.length === 0) {
-        return;
-      }
-
-      const selectedTodo = x[0];
-      const dialogRef = this.dialog.open(EnterNameDialogComponent, { data: { name: selectedTodo.name } });
-      dialogRef.afterClosed().subscribe(dialogResult => {
-        if (!dialogResult) {
-          return;
-        }
-
-        const updatedTodo: Todo = {
-          _id: selectedTodo._id,
-          isSelected: selectedTodo.isSelected,
-          todos: selectedTodo.todos,
-          name: dialogResult.name
-        };
-        this.todosService.updateTodo(updatedTodo);
-      });
     });
   }
 

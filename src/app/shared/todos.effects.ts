@@ -9,24 +9,22 @@ import {
   FetchAllSuccess,
   TodosAction,
   FetchAllFailure,
-  UpsertRoot,
-  UpsertRootSuccess,
-  UpsertRootFailure,
+  Upsert,
+  UpsertSuccess,
+  UpsertFailure,
   Delete,
   DeleteSuccess,
   DeleteFailure,
   ListInputShakingStart,
   ListInputShakingStop,
   ListInputValueChanged,
-  UpsertChild,
-  UpsertChildSuccess,
-  UpsertChildFailure
 } from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { Todo } from 'src/app/shared/todo.model';
 import { AppState } from '../app-state.model';
-import { Store, Action } from '@ngrx/store';
 import { TodosService } from './todos.service';
+import { Store, Action } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class TodosEffects {
@@ -34,8 +32,8 @@ export class TodosEffects {
     private readonly actions: Actions,
     private readonly http: HttpClient,
     private readonly store: Store<AppState>,
-    private readonly todosService: TodosService) {
-    console.log('init');
+    private readonly todosService: TodosService,
+    private readonly snackbar: MatSnackBar) {
 
   }
 
@@ -47,51 +45,46 @@ export class TodosEffects {
 
   @Effect()
   upsertRoot: Observable<TodosAction> = this.actions.pipe(
-    ofType(TodosActionTypes.UPSERT_ROOT),
-    map((x: UpsertRoot) => {
-      x.todo.parent = null;
+    ofType(TodosActionTypes.UPSERT),
+    map((x: Upsert) => {
+      x.todo = this.todosService.createTodosWithOutParents(x.todo);
       return x;
     }),
-    mergeMap((action: UpsertRoot) => this.http.post<Todo>(`${environment.apiBasePath}todos`, action.todo).pipe(
-      map(todo => new UpsertRootSuccess(todo)),
-      catchError(() => of(new UpsertRootFailure()))
-    ))
-  );
-
-  @Effect()
-  refresh: Observable<TodosAction> = this.actions.pipe(
-    ofType(TodosActionTypes.UPSERT_ROOT_SUCCESS, TodosActionTypes.UPSERT_CHILD_SUCCESS),
-    map(x => new FetchAll())
-  );
-
-  @Effect()
-  upsertChild: Observable<TodosAction> = this.actions.pipe(
-    ofType(TodosActionTypes.UPSERT_CHILD),
-    map((x: UpsertChild) => {
-      x.todo.parent = null;
-      return x;
-    }),
-    mergeMap((action: UpsertChild) => {
-      let upsert = this.http.put<Todo>(`${environment.apiBasePath}todos/${action.todo._id}`, action.todo);
-
-      if (!action.todo._id) {
-        upsert = this.http.post<Todo>(`${environment.apiBasePath}todos/${action.parentTodoId}`, action.todo);
+    mergeMap(action => {
+      let upsert = this.http.post<Todo>(`${environment.apiBasePath}todos`, action.todo);
+      if (action.todo.parentId) {
+        upsert = this.http.post<Todo>(`${environment.apiBasePath}todos/${action.todo.parentId}`, action.todo);
       }
 
       return upsert.pipe(
-        map(upsertedRootTodo => new UpsertChildSuccess(upsertedRootTodo)),
-        catchError(() => of(new UpsertChildFailure()))
+        map(todo => new UpsertSuccess(null)),
+        catchError(() => of(new UpsertFailure()))
       );
     })
   );
 
   @Effect()
+  refresh: Observable<TodosAction> = this.actions.pipe(
+    ofType(TodosActionTypes.UPSERT_SUCCESS),
+    map(x => new FetchAll())
+  );
+
+  @Effect()
   delete: Observable<TodosAction> = this.actions.pipe(
     ofType(TodosActionTypes.DELETE),
-    mergeMap((action: Delete) => this.http.delete<Todo>(`${environment.apiBasePath}todos/${action.todoId}`).pipe(
-      map(() => new DeleteSuccess(action.todoId)),
-      catchError(() => of(new DeleteFailure(action.todoId)))
-    ))
+    mergeMap((action: Delete) => {
+      if (action.todo.parentId) {
+        this.snackbar.open('Deletion of nested todos not implemented yet :|', 'my bad', {
+          duration: 5000
+        });
+        return of(new DeleteSuccess(action.todo._id));
+      }
+
+      return this.http.delete<Todo>(`${environment.apiBasePath}todos/${action.todo._id}`).pipe(
+        map(() => new DeleteSuccess(action.todo._id)),
+        catchError(() => of(new DeleteFailure(action.todo._id)))
+      );
+    })
   );
 
   @Effect()
@@ -103,19 +96,25 @@ export class TodosEffects {
         return x;
       }),
       map(todos => new FetchAllSuccess(todos)),
-      catchError(() => of(new FetchAllFailure()))
+      catchError((err) => of(new FetchAllFailure(err)))
     ))
+  );
+
+  @Effect({ dispatch: false })
+  fetchAllFailure: Observable<Action> = this.actions.pipe(
+    ofType(TodosActionTypes.FETCH_ALL_FAILURE),
+    tap((x: FetchAllFailure) => console.log(x.error))
   );
 
   @Effect()
   upsertSuccess: Observable<TodosAction> = this.actions.pipe(
-    ofType(TodosActionTypes.UPSERT_ROOT_SUCCESS, TodosActionTypes.UPSERT_CHILD_SUCCESS),
+    ofType(TodosActionTypes.UPSERT_SUCCESS),
     map(x => new ListInputValueChanged(''))
   );
 
   @Effect()
   upsertFailure: Observable<TodosAction> = this.actions.pipe(
-    ofType(TodosActionTypes.UPSERT_ROOT_FAILURE, TodosActionTypes.UPSERT_CHILD_FAILURE),
+    ofType(TodosActionTypes.UPSERT_FAILURE),
     map(action => {
       timer(1000).subscribe(x => this.store.dispatch(new ListInputShakingStop()));
 

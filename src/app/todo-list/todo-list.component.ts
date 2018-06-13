@@ -1,9 +1,10 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef, QueryList, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, ElementRef, QueryList, ViewChildren, AfterViewInit, Output } from '@angular/core';
 import { Todo } from '../shared/todo.model';
 import { Input } from '@angular/core';
 import { TodosService } from '../shared/todos.service';
 import { MatCheckboxChange, MatFormField, MatInput } from '@angular/material';
 import { timer } from 'rxjs';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'osmi-todo-list',
@@ -16,6 +17,12 @@ export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
   todo: Todo;
   isEditing = false;
   name: string;
+
+  @Output()
+  updated = new EventEmitter<Todo>();
+
+  @Output()
+  deleted = new EventEmitter<Todo>();
 
   @ViewChildren('nameInput')
   nameInputs: QueryList<ElementRef>;
@@ -41,7 +48,7 @@ export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   deleteList(): void {
-    this.todosService.deleteTodo(this.todo._id);
+    this.deleted.emit(this.todo);
   }
 
   editList(): void {
@@ -51,10 +58,10 @@ export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
   updateList(): void {
     const updatedTodo: Todo = {
       ...this.todo,
-      name: this.name
+      name: this.name,
     };
 
-    this.todosService.updateTodo(updatedTodo);
+    this.updated.emit(updatedTodo);
     this.isEditing = false;
   }
 

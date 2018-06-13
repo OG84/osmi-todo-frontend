@@ -15,7 +15,8 @@ import {
   MatDialogModule,
   MatChipsModule,
   MatCheckboxModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TodoListsComponent } from './todo-lists/todo-lists.component';
@@ -77,6 +78,7 @@ export const effects = [
     MatChipsModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatSnackBarModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({

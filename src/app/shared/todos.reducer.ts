@@ -12,7 +12,7 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
   let newTodos: Todo[];
 
   switch (action.type) {
-    case TodosActionTypes.UPSERT_ROOT_SUCCESS:
+    /*case TodosActionTypes.UPSERT:
       const isNewTodo = !state.todos.some(x => x._id === action.todo._id);
 
       if (isNewTodo) {
@@ -26,21 +26,7 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
       return {
         ...state,
         todos: newTodos
-      };
-    case TodosActionTypes.UPSERT_CHILD_SUCCESS:
-      newTodos = [...state.todos];
-
-      const existingRootIndex = newTodos.findIndex(x => x._id === action.upsertedRootTodo._id);
-      if (existingRootIndex === -1) {
-        newTodos.push(action.upsertedRootTodo);
-      }
-
-      newTodos[existingRootIndex] = action.upsertedRootTodo;
-
-      return {
-        ...state,
-        todos: newTodos
-      };
+      };*/
     case TodosActionTypes.DELETE_SUCCESS:
       newTodos = state.todos.filter(x => x._id !== action.todoId);
 
