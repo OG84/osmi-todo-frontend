@@ -9,10 +9,10 @@ import {
 import { Todo } from '../shared/todo.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Key } from 'protractor';
-import { Observable, EMPTY, Subject, combineLatest, of } from 'rxjs';
+import { Observable, EMPTY, Subject, of } from 'rxjs';
 import { TodosService } from '../shared/todos.service';
 import { MatInput, MatDialog } from '@angular/material';
-import { filter, first, map, tap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter, first, map, tap, switchMap } from 'rxjs/operators';
 import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
 import { ToolbarService } from '../toolbar/toolbar.service';
 import { Store } from '@ngrx/store';
@@ -37,8 +37,9 @@ export class TodoListsComponent implements OnInit {
   isSingleSelectionActive = false;
   isListEmpty = false;
 
-  todos: Observable<Todo[]>;
-  todo: Todo;
+  children: Observable<Todo[]>;
+  self: Todo;
+  parent: Todo;
 
   @ViewChild('newList')
   newListInput: ElementRef;
@@ -54,10 +55,11 @@ export class TodoListsComponent implements OnInit {
   ngOnInit() {
     this.toolbarService.setTitle('Manage Lists');
 
-    this.todos = this.store.select(fromTodoLists.selectTodoLists);
-    this.store.select(fromTodoLists.selectTodo).subscribe(x => this.todo = x);
+    this.children = this.store.select(fromTodoLists.selectChildren);
+    this.store.select(fromTodoLists.selectSelf).subscribe(x => this.self = x);
+    this.store.select(fromTodoLists.selectParent).subscribe(x => this.parent = x);
 
-    this.todos.subscribe(x => {
+    this.children.subscribe(x => {
       this.isListEmpty = !x || x.length === 0;
     });
   }
@@ -80,7 +82,7 @@ export class TodoListsComponent implements OnInit {
       return;
     }
 
-    const newTodo: Todo = { name: newListName, todos: [], parentId: this.todo ? this.todo._id : null };
+    const newTodo: Todo = { name: newListName, parentId: this.self ? this.self._id : null };
     console.log('upsert', newTodo);
 
     this.todosService.upsertTodo(newTodo);

@@ -39,6 +39,7 @@ import { toolbarReducer } from 'src/app/toolbar/toolbar.reducer';
 import { ToolbarService } from './toolbar/toolbar.service';
 import { todoListsReducer } from './todo-lists/todo-lists.reducer';
 import { TodoListsEffects } from './todo-lists/todo-lists.effects';
+import { RouterStateUrl } from './app-routing.module';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {

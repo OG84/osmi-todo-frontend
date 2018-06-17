@@ -64,8 +64,4 @@ export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
     this.updated.emit(updatedTodo);
     this.isEditing = false;
   }
-
-  select(checkboxChange: MatCheckboxChange): void {
-    this.todosService.selectTodo(this.todo, checkboxChange.checked);
-  }
 }

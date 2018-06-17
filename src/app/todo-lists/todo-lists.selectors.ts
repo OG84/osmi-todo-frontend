@@ -2,5 +2,6 @@ import { AppState } from '../app-state.model';
 import { createSelector } from '@ngrx/store';
 
 const selectTodoListsState = (state: AppState) => state.todoLists;
-export const selectTodoLists = createSelector(selectTodoListsState, x => x.todos);
-export const selectTodo = createSelector(selectTodoListsState, x => x.todo);
+export const selectChildren = createSelector(selectTodoListsState, x => x.children);
+export const selectSelf = createSelector(selectTodoListsState, x => x.self);
+export const selectParent = createSelector(selectTodoListsState, x => x.parent);

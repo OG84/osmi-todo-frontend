@@ -8,10 +8,6 @@ export enum TodosActionTypes {
   DELETE = '[todos] delete',
   DELETE_SUCCESS = '[todos] delete success',
   DELETE_FAILURE = '[todos] delete failure',
-  SELECT = '[todos] select',
-  FETCH_ALL = '[todos] fetch all',
-  FETCH_ALL_SUCCESS = '[todos] fetch all success',
-  FETCH_ALL_FAILURE = '[todos] fetch all failure',
   LIST_INPUT_SHAKING_START = '[todos] list input shaking start',
   LIST_INPUT_SHAKING_STOP = '[todos] list input shaking stop',
   LIST_INPUT_VALUE_CHANGED = '[todos] list input value changed'
@@ -51,28 +47,6 @@ export class DeleteFailure implements Action {
   constructor(public failedTodoId: string) { }
 }
 
-export class FetchAll implements Action {
-  readonly type = TodosActionTypes.FETCH_ALL;
-}
-
-export class FetchAllSuccess implements Action {
-  readonly type = TodosActionTypes.FETCH_ALL_SUCCESS;
-
-  constructor(public todos: Todo[]) { }
-}
-
-export class FetchAllFailure implements Action {
-  readonly type = TodosActionTypes.FETCH_ALL_FAILURE;
-
-  constructor(public error: string) { }
-}
-
-export class Select implements Action {
-  readonly type = TodosActionTypes.SELECT;
-
-  constructor(public todo: Todo, public isSelected: boolean) { }
-}
-
 export class ListInputShakingStart implements Action {
   readonly type = TodosActionTypes.LIST_INPUT_SHAKING_START;
 }
@@ -93,10 +67,6 @@ export type TodosAction = Upsert |
   Delete |
   DeleteSuccess |
   DeleteFailure |
-  FetchAll |
-  FetchAllSuccess |
-  FetchAllFailure |
-  Select |
   ListInputShakingStart |
   ListInputShakingStop |
   ListInputValueChanged;

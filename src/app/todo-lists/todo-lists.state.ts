@@ -1,6 +1,7 @@
 import { Todo } from '../shared/todo.model';
 
 export interface TodoListsState {
-  todo: Todo;
-  todos: Todo[];
+  parent: Todo;
+  self: Todo;
+  children: Todo[];
 }

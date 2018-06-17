@@ -1,9 +1,9 @@
 <div fxLayout="column">
   <div class="osmi-todo-controls" fxLayout="column">
     <div class="backlinks osmi-todo-control">
-      <button mat-stroked-button color="primary" [routerLink]="['/lists', todo?.parent?._id]" fxHide.lt-sm *ngIf="todo?.parent">
-        <mat-icon>arrow_left</mat-icon> Back to {{todo?.parent?.name}}</button>
-      <button mat-stroked-button color="primary" [routerLink]="['/lists']" fxHide.lt-sm *ngIf="todo && !todo.parent">
+      <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" fxHide.lt-sm *ngIf="parent">
+        <mat-icon>arrow_left</mat-icon> Back to {{parent?.name}}</button>
+      <button mat-stroked-button color="primary" [routerLink]="['/lists']" fxHide.lt-sm *ngIf="self && !parent">
         <mat-icon>arrow_left</mat-icon> Back to overview</button>
     </div>
     <div class="osmi-todo-control" fxLayout="row" fxHide.lt-md>
@@ -21,7 +21,7 @@
   </div>
 
   <div class="todo-lists" fxFlexFill>
-    <div *ngFor="let todo of todos | async">
+    <div *ngFor="let todo of children | async">
       <osmi-todo-list [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list>
       <mat-divider></mat-divider>
     </div>
