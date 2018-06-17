@@ -1,8 +1,8 @@
 <div fxLayout="column">
   <div class="todo-backlinks">
-    <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" fxHide.lt-sm *ngIf="parent">
+    <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" *ngIf="parent">
       <mat-icon>arrow_left</mat-icon> Back to {{parent?.name}}</button>
-    <button mat-stroked-button color="primary" [routerLink]="['/lists']" fxHide.lt-sm *ngIf="self && !parent">
+    <button mat-stroked-button color="primary" [routerLink]="['/lists']" *ngIf="self && !parent">
       <mat-icon>arrow_left</mat-icon> Back to overview</button>
   </div>
 
