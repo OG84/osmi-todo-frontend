@@ -57,10 +57,18 @@
         }
     }
 
+    .todo-backlinks {
+        margin: 0 0 30px;
+    }
+
+    .todo-metadata {
+        margin: 0 0 30px;
+    }
+
     .osmi-todo-arrow {
-      position: fixed;
-      bottom: 12px;
-      right: 65px;
+        position: fixed;
+        bottom: 12px;
+        right: 65px;
     }
 
     .todo-mobile-add {
@@ -75,7 +83,7 @@
         text-align: center;
 
         .small-hint {
-          font-size: 0.8em;
+            font-size: .8em;
         }
 
         mat-icon {
@@ -85,20 +93,21 @@
         }
     }
 
-    .shaking{
-      color: red;
-      animation: shaking 0.2s infinite;
+    .shaking {
+        color: red;
+        animation: shaking .2s infinite;
     }
-
     @keyframes shaking {
-      0% {
-        transform: translateX(0);
-      }
-      50% {
-        transform: translateX(10px);
-      }
-      100% {
-        transform: translateX(0);
-      }
+        0% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(10px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
     }
 }

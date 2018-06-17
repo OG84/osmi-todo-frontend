@@ -19,6 +19,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../app-state.model';
 import { ListInputValueChanged } from '../shared/todos.actions';
 import * as fromTodoLists from './todo-lists.selectors';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 @Component({
   selector: 'osmi-todo-lists',
@@ -98,6 +100,13 @@ export class TodoListsComponent implements OnInit {
     this.todosService.deleteTodo(todo);
   }
 
+  changeDate(_moment: Moment) {
+    this.todosService.upsertTodo({
+      ...this.self,
+      dueDate: _moment.toString()
+    });
+  }
+
   openAddListDialog(): void {
     const dialogRef = this.dialog.open(EnterNameDialogComponent);
     dialogRef.afterClosed().subscribe(dialogResult => {
@@ -108,7 +117,7 @@ export class TodoListsComponent implements OnInit {
     });
   }
 
-  nextList(): void {
+  /*nextList(): void {
     this.router.navigate(['/lists', 2]);
   }
 
@@ -126,5 +135,5 @@ export class TodoListsComponent implements OnInit {
         this.previousList();
         break;
     }
-  }
+  }*/
 }

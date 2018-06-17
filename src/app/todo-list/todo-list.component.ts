@@ -5,6 +5,8 @@ import { TodosService } from '../shared/todos.service';
 import { MatCheckboxChange, MatFormField, MatInput } from '@angular/material';
 import { timer } from 'rxjs';
 import { EventEmitter } from '@angular/core';
+import { Moment } from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'osmi-todo-list',
@@ -17,6 +19,7 @@ export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
   todo: Todo;
   isEditing = false;
   name: string;
+  dueDate: Moment;
 
   @Output()
   updated = new EventEmitter<Todo>();
@@ -35,6 +38,7 @@ export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnChanges(): void {
     this.name = this.todo.name;
+    this.dueDate = moment(this.todo.dueDate);
   }
 
   ngAfterViewInit(): void {
@@ -59,9 +63,14 @@ export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
     const updatedTodo: Todo = {
       ...this.todo,
       name: this.name,
+      dueDate: this.dueDate.toString()
     };
 
     this.updated.emit(updatedTodo);
     this.isEditing = false;
+  }
+
+  changeDate(_moment: Moment) {
+    this.dueDate = _moment;
   }
 }

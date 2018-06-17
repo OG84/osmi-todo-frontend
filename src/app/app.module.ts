@@ -16,7 +16,11 @@ import {
   MatChipsModule,
   MatCheckboxModule,
   MatTooltipModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatDatepickerModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TodoListsComponent } from './todo-lists/todo-lists.component';
@@ -40,6 +44,8 @@ import { ToolbarService } from './toolbar/toolbar.service';
 import { todoListsReducer } from './todo-lists/todo-lists.reducer';
 import { TodoListsEffects } from './todo-lists/todo-lists.effects';
 import { RouterStateUrl } from './app-routing.module';
+import { MomentPipe, MomentFromNowPipe } from './shared/moment.pipes';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
@@ -59,7 +65,9 @@ export const effects = [
     TodoListsComponent,
     TodoListComponent,
     HomeComponent,
-    EnterNameDialogComponent
+    EnterNameDialogComponent,
+    MomentPipe,
+    MomentFromNowPipe
   ],
   imports: [
     BrowserAnimationsModule,
@@ -80,6 +88,7 @@ export const effects = [
     MatCheckboxModule,
     MatTooltipModule,
     MatSnackBarModule,
+    MatDatepickerModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({
@@ -90,7 +99,9 @@ export const effects = [
   ],
   providers: [
     TodosService,
-    ToolbarService
+    ToolbarService,
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
   ],
   entryComponents: [
     EnterNameDialogComponent
