@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Effect, Actions, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
-import { Observable, of, timer } from 'rxjs';
+import { Observable, of, timer, EMPTY } from 'rxjs';
 import { map, mergeMap, catchError, tap, combineLatest, first, last, skip, withLatestFrom } from 'rxjs/operators';
 import {
   TodosActionTypes,
@@ -90,10 +90,12 @@ export class TodosEffects {
     tap(([action, copied, cutted]) => {
       cutted.forEach(x => {
         this.http.get<Todo>(`${environment.apiBasePath}todos/${x}`).pipe(
-          map(todo => {
+          withLatestFrom(action.parentTodoId ? this.http.get<Todo>(`${environment.apiBasePath}todos/${action.parentTodoId}`) : of(null)),
+          map(([todo, parentTodo]) => {
             return {
               ...todo,
-              parentId: action.parentTodoId
+              parentId: action.parentTodoId,
+              dueDate: parentTodo ? parentTodo.dueDate : todo.dueDate
             };
           }),
           tap(todo => this.todosService.upsert(todo)),
@@ -103,12 +105,14 @@ export class TodosEffects {
 
       copied.forEach(x => {
         this.http.get<Todo>(`${environment.apiBasePath}todos/${x}`).pipe(
-          map(todo => {
+          withLatestFrom(action.parentTodoId ? this.http.get<Todo>(`${environment.apiBasePath}todos/${action.parentTodoId}`) : of(null)),
+          map(([todo, parentTodo]) => {
             return {
               ...todo,
               _id: null,
               parentId: action.parentTodoId,
-              name: `${todo.name} Kopie`
+              name: `${todo.name} Kopie`,
+              dueDate: parentTodo ? parentTodo.dueDate : todo.dueDate
             };
           }),
           tap(todo => this.todosService.upsert(todo)),
