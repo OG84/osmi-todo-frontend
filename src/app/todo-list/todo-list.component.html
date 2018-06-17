@@ -1,16 +1,23 @@
 <div class="osmi-todo-list" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-  <div *ngIf="!isEditing" fxFlex [routerLink]="['/lists', todo._id]">{{todo?.name}}</div>
-  <mat-form-field *ngIf="isEditing" fxFlex>
-    <input #nameInput matInput placeholder="Name of the list" [(ngModel)]="name" (keyup.enter)="updateList()" autofocus>
-  </mat-form-field>
-  <mat-form-field *ngIf="isEditing">
-    <input matInput [matDatepicker]="dp3" placeholder="Due at" [(ngModel)]="dueDate" (keyup.enter)="updateList()" (dateChange)="changeDate($event.value)">
-    <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
-    <mat-datepicker #dp3 disabled="false"></mat-datepicker>
-  </mat-form-field>
-  <mat-chip-list *ngIf="todo.dueDate">
-    <mat-chip>{{todo.dueDate | momentFromNow}}</mat-chip>
-  </mat-chip-list>
+  <div fxLayout="row" fxLayout.xs="column" fxFlex *ngIf="isEditing">
+    <mat-form-field fxFlex>
+      <input #nameInput matInput placeholder="Name of the list" [(ngModel)]="name" (keyup.enter)="updateList()" autofocus>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="dp3" placeholder="Due at" [(ngModel)]="dueDate" (keyup.enter)="updateList()" (dateChange)="changeDate($event.value)">
+      <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+      <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayout.xs="column" fxFlex *ngIf="!isEditing" [routerLink]="['/lists', todo._id]">
+    <div fxFlex>{{todo?.name}}</div>
+    <mat-chip-list *ngIf="todo.dueDate" fxHide.xs>
+      <mat-chip>{{todo.dueDate | momentFromNow}}</mat-chip>
+    </mat-chip-list>
+    <div class="todo-duedate" *ngIf="todo.dueDate" fxHide.gt-xs>due {{todo.dueDate | momentFromNow}}</div>
+  </div>
+
   <button mat-icon-button color="accent" (click)="editList()" *ngIf="!isEditing">
     <mat-icon aria-label="edit list">edit</mat-icon>
   </button>
