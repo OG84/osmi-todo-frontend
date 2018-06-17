@@ -10,7 +10,13 @@ export enum TodosActionTypes {
   DELETE_FAILURE = '[todos] delete failure',
   LIST_INPUT_SHAKING_START = '[todos] list input shaking start',
   LIST_INPUT_SHAKING_STOP = '[todos] list input shaking stop',
-  LIST_INPUT_VALUE_CHANGED = '[todos] list input value changed'
+  LIST_INPUT_VALUE_CHANGED = '[todos] list input value changed',
+  COPY_ADD = '[todos] copy add',
+  COPY_REMOVE = '[todos] copy remove',
+  CUT_ADD = '[todos] cut add',
+  CUT_REMOVE = '[todos] cut remove',
+  PASTE = '[todos] paste',
+  PASTE_SUCCESS = '[todos] paste success'
 }
 
 export class Upsert implements Action {
@@ -61,6 +67,42 @@ export class ListInputValueChanged implements Action {
   constructor(public value: string) { }
 }
 
+export class CopyAdd implements Action {
+  readonly type = TodosActionTypes.COPY_ADD;
+
+  constructor(public todoId: string) { }
+}
+
+export class CopyRemove implements Action {
+  readonly type = TodosActionTypes.COPY_REMOVE;
+
+  constructor(public todoId: string) { }
+}
+
+export class CutAdd implements Action {
+  readonly type = TodosActionTypes.CUT_ADD;
+
+  constructor(public todoId: string) { }
+}
+
+export class CutRemove implements Action {
+  readonly type = TodosActionTypes.CUT_REMOVE;
+
+  constructor(public todoId: string) { }
+}
+
+export class Paste implements Action {
+  readonly type = TodosActionTypes.PASTE;
+
+  constructor(public parentTodoId: string) { }
+}
+
+export class PasteSuccess implements Action {
+  readonly type = TodosActionTypes.PASTE_SUCCESS;
+
+  constructor() { }
+}
+
 export type TodosAction = Upsert |
   UpsertSuccess |
   UpsertFailure |
@@ -69,4 +111,10 @@ export type TodosAction = Upsert |
   DeleteFailure |
   ListInputShakingStart |
   ListInputShakingStop |
-  ListInputValueChanged;
+  ListInputValueChanged |
+  CopyAdd |
+  CopyRemove |
+  CutAdd |
+  CutRemove |
+  Paste |
+  PasteSuccess;

@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 import { Todo } from './todo.model';
 import {
   selectIsListInputShaking,
-  selectListInputValue
+  selectListInputValue,
+  selectCopiedTodoIds,
+  selectCuttedTodoIds
 } from './todos.selectors';
 import * as fromTodos from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { skip } from 'rxjs/operators';
+import { skip, first } from 'rxjs/operators';
 
 @Injectable()
 export class TodosService {
@@ -20,12 +22,24 @@ export class TodosService {
 
   }
 
-  upsertTodo(todo: Todo): void {
+  upsert(todo: Todo): void {
     this.store.dispatch(new fromTodos.Upsert(todo));
   }
 
-  deleteTodo(todo: Todo): void {
+  delete(todo: Todo): void {
     this.store.dispatch(new fromTodos.Delete(todo));
+  }
+
+  copy(todo: Todo): void {
+    this.store.dispatch(new fromTodos.CopyAdd(todo._id));
+  }
+
+  cut(todo: Todo): void {
+    this.store.dispatch(new fromTodos.CutAdd(todo._id));
+  }
+
+  paste(parentTodoId: string): void {
+    this.store.dispatch(new fromTodos.Paste(parentTodoId));
   }
 
   get listInputValue(): Observable<string> {
@@ -34,6 +48,14 @@ export class TodosService {
 
   get isListInputShaking(): Observable<boolean> {
     return this.store.select(selectIsListInputShaking);
+  }
+
+  get copiedTodos(): Observable<string[]> {
+    return this.store.select(selectCopiedTodoIds);
+  }
+
+  get cuttedTodos(): Observable<string[]> {
+    return this.store.select(selectCuttedTodoIds);
   }
 
   updateListInputValue(value: string): void {

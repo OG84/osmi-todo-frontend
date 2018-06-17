@@ -12,7 +12,7 @@ import { Key } from 'protractor';
 import { Observable, EMPTY, Subject, of } from 'rxjs';
 import { TodosService } from '../shared/todos.service';
 import { MatInput, MatDialog } from '@angular/material';
-import { filter, first, map, tap, switchMap } from 'rxjs/operators';
+import { filter, first, map, tap, switchMap, combineLatest } from 'rxjs/operators';
 import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
 import { ToolbarService } from '../toolbar/toolbar.service';
 import { Store } from '@ngrx/store';
@@ -38,6 +38,7 @@ export class TodoListsComponent implements OnInit {
   isSelectionActive = false;
   isSingleSelectionActive = false;
   isListEmpty = false;
+  isPasteButtonVisible = false;
 
   children: Observable<Todo[]>;
   self: Todo;
@@ -64,6 +65,12 @@ export class TodoListsComponent implements OnInit {
     this.children.subscribe(x => {
       this.isListEmpty = !x || x.length === 0;
     });
+
+    this.todosService.copiedTodos.pipe(
+      combineLatest(this.todosService.cuttedTodos, this.children)
+    ).subscribe(([copied, cutted, currentChildren]) =>
+      this.isPasteButtonVisible = copied.length > 0 || cutted.length > 0
+    );
   }
 
   get listInputValue(): Observable<string> {
@@ -85,24 +92,28 @@ export class TodoListsComponent implements OnInit {
     }
 
     const newTodo: Todo = { name: newListName, parentId: this.self ? this.self._id : null };
-    this.todosService.upsertTodo(newTodo);
+    this.todosService.upsert(newTodo);
   }
 
   upsertTodo(todo: Todo): void {
     console.log('upsert by event', todo);
 
-    this.todosService.upsertTodo(todo);
+    this.todosService.upsert(todo);
   }
 
   deleteTodo(todo: Todo): void {
-    this.todosService.deleteTodo(todo);
+    this.todosService.delete(todo);
   }
 
   changeDate(_moment: Moment) {
-    this.todosService.upsertTodo({
+    this.todosService.upsert({
       ...this.self,
       dueDate: _moment ? _moment.toString() : null
     });
+  }
+
+  paste(): void {
+    this.todosService.paste(this.self ? this.self._id : null);
   }
 
   openAddListDialog(): void {
@@ -112,7 +123,7 @@ export class TodoListsComponent implements OnInit {
         return;
       }
       const newTodo: Todo = { name: dialogResult.name, parentId: this.self ? this.self._id : null };
-      this.todosService.upsertTodo(newTodo);
+      this.todosService.upsert(newTodo);
     });
   }
 

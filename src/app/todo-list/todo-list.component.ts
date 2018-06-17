@@ -73,4 +73,12 @@ export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
   changeDate(_moment: Moment) {
     this.dueDate = _moment;
   }
+
+  copy(): void {
+    this.todosService.copy(this.todo);
+  }
+
+  cut(): void {
+    this.todosService.cut(this.todo);
+  }
 }

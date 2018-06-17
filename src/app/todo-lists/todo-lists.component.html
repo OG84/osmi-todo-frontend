@@ -20,11 +20,13 @@
     </mat-chip-list>
   </div>
 
+  <div *ngIf="self" class="todo-heading">Sub tasks</div>
+
   <div class="osmi-todo-control" fxLayout="row" fxHide.lt-md fxLayoutGap="10px">
     <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
       <mat-form-field fxFlexFill>
-        <input #newList matInput [placeholder]="self ? 'Enter new sub task or list' : 'Enter  new task or list'" [value]="listInputValue | async" (input)="updateListInputValue($event.target.value)"
-          (keydown.enter)="addList()" [class.shaking]="isListInputShaking | async">
+        <input #newList matInput [placeholder]="self ? 'Enter new sub task or list' : 'Enter  new task or list'" [value]="listInputValue | async"
+          (input)="updateListInputValue($event.target.value)" (keydown.enter)="addList()" [class.shaking]="isListInputShaking | async">
       </mat-form-field>
     </div>
     <div fxLayoutAlign="center center">
@@ -33,8 +35,12 @@
     </div>
   </div>
 
+  <div fxLayout="row">
+    <button mat-stroked-button color="accent" (click)="paste()" *ngIf="isPasteButtonVisible">
+      Paste <mat-icon>arrow_right_alt</mat-icon></button>
+  </div>
+
   <div class="todo-lists" fxFlexFill fxLayout="column">
-    <div *ngIf="self">Sub tasks</div>
     <div *ngFor="let todo of children | async">
       <osmi-todo-list [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list>
       <mat-divider></mat-divider>

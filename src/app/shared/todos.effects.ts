@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Effect, Actions, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { Observable, of, timer } from 'rxjs';
-import { map, mergeMap, catchError, tap } from 'rxjs/operators';
+import { map, mergeMap, catchError, tap, combineLatest, first, last, skip, withLatestFrom } from 'rxjs/operators';
 import {
   TodosActionTypes,
   TodosAction,
@@ -15,6 +15,8 @@ import {
   ListInputShakingStart,
   ListInputShakingStop,
   ListInputValueChanged,
+  Paste,
+  PasteSuccess,
 } from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { Todo } from 'src/app/shared/todo.model';
@@ -22,6 +24,7 @@ import { AppState } from '../app-state.model';
 import { TodosService } from './todos.service';
 import { Store, Action } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
+import { selectCopiedTodoIds } from './todos.selectors';
 
 @Injectable()
 export class TodosEffects {
@@ -75,5 +78,44 @@ export class TodosEffects {
         catchError(() => of(new DeleteFailure(action.todo._id)))
       );
     })
+  );
+
+  @Effect()
+  paste = this.actions.pipe(
+    ofType<Paste>(TodosActionTypes.PASTE),
+    withLatestFrom(
+      this.todosService.copiedTodos,
+      this.todosService.cuttedTodos
+    ),
+    tap(([action, copied, cutted]) => {
+      cutted.forEach(x => {
+        this.http.get<Todo>(`${environment.apiBasePath}todos/${x}`).pipe(
+          map(todo => {
+            return {
+              ...todo,
+              parentId: action.parentTodoId
+            };
+          }),
+          tap(todo => this.todosService.upsert(todo)),
+          catchError(err => err)
+        ).subscribe();
+      });
+
+      copied.forEach(x => {
+        this.http.get<Todo>(`${environment.apiBasePath}todos/${x}`).pipe(
+          map(todo => {
+            return {
+              ...todo,
+              _id: null,
+              parentId: action.parentTodoId,
+              name: `${todo.name} Kopie`
+            };
+          }),
+          tap(todo => this.todosService.upsert(todo)),
+          catchError(err => err)
+        ).subscribe();
+      });
+    }),
+    map(x => new PasteSuccess())
   );
 }
