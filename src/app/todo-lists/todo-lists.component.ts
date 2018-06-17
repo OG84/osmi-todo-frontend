@@ -85,8 +85,6 @@ export class TodoListsComponent implements OnInit {
     }
 
     const newTodo: Todo = { name: newListName, parentId: this.self ? this.self._id : null };
-    console.log('upsert', newTodo);
-
     this.todosService.upsertTodo(newTodo);
   }
 
@@ -113,7 +111,8 @@ export class TodoListsComponent implements OnInit {
       if (!dialogResult) {
         return;
       }
-      this.todosService.upsertTodo({ name: dialogResult.name });
+      const newTodo: Todo = { name: dialogResult.name, parentId: this.self ? this.self._id : null };
+      this.todosService.upsertTodo(newTodo);
     });
   }
 

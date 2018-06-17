@@ -42,11 +42,10 @@
     <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlexFill fxLayoutAlign="center center">
       <mat-icon>list</mat-icon>
       <span>This place looks empty</span>
-      <span class="small-hint">Add some lists to get started</span>
+      <span class="small-hint">Add some tasks or lists to get started</span>
     </div>
   </div>
   <div fxHide.gt-sm>
-    <img class="osmi-todo-arrow" src="assets/curved-arrow.png" *ngIf="isListEmpty">
     <button mat-fab color="accent" class="todo-mobile-add" (click)="openAddListDialog()">
       <mat-icon>add</mat-icon>
     </button>
