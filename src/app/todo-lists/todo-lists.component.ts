@@ -103,7 +103,7 @@ export class TodoListsComponent implements OnInit {
   changeDate(_moment: Moment) {
     this.todosService.upsertTodo({
       ...this.self,
-      dueDate: _moment.toString()
+      dueDate: _moment ? _moment.toString() : null
     });
   }
 
