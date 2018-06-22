@@ -1,59 +1,66 @@
-<div fxLayout="column">
-  <div class="todo-backlinks">
-    <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" *ngIf="parent">
-      <mat-icon>arrow_left</mat-icon> Back to {{parent?.name}}</button>
-    <button mat-stroked-button color="primary" [routerLink]="['/lists']" *ngIf="self && !parent">
-      <mat-icon>arrow_left</mat-icon> Back to overview</button>
-  </div>
+<div fxLayout="row" fxLayout.xs="column">
+  <div fxLayout="column">
+    <div class="todo-backlinks">
+      <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" *ngIf="parent">
+        <mat-icon>arrow_left</mat-icon> Back to {{parent?.name}}</button>
+      <button mat-stroked-button color="primary" [routerLink]="['/lists']" *ngIf="self && !parent">
+        <mat-icon>arrow_left</mat-icon> Back to overview</button>
+    </div>
 
-  <div class="todo-metadata" fxLayout="column" *ngIf="self">
-    <mat-form-field>
-      <input matInput placeholder="Name" [value]="self.name">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [matDatepicker]="dp3" placeholder="Due at" [value]="self.dueDate" (dateChange)="changeDate($event.value)">
-      <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
-      <mat-datepicker #dp3 disabled="false"></mat-datepicker>
-    </mat-form-field>
-    <mat-chip-list *ngIf="self.dueDate">
-      <mat-chip>{{self.dueDate | momentFromNow}}</mat-chip>
-    </mat-chip-list>
-  </div>
-
-  <div *ngIf="self" class="todo-heading">Sub tasks</div>
-
-  <div class="osmi-todo-control" fxLayout="row" fxHide.lt-md fxLayoutGap="10px">
-    <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
-      <mat-form-field fxFlexFill>
-        <input #newList matInput [placeholder]="self ? 'Enter new sub task or list' : 'Enter  new task or list'" [value]="listInputValue | async"
-          (input)="updateListInputValue($event.target.value)" (keydown.enter)="addList()" [class.shaking]="isListInputShaking | async">
+    <div class="todo-metadata" fxLayout="column" *ngIf="self">
+      <mat-form-field>
+        <input matInput placeholder="Name" [value]="self.name">
       </mat-form-field>
-    </div>
-    <div fxLayoutAlign="center center">
-      <button mat-stroked-button color="accent" (click)="addList()">
-        <mat-icon>add</mat-icon> add</button>
+      <mat-form-field>
+        <input matInput [matDatepicker]="dp3" placeholder="Due at" [value]="self.dueDate" (dateChange)="changeDate($event.value)">
+        <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+        <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+      </mat-form-field>
+      <mat-chip-list *ngIf="self.dueDate">
+        <mat-chip>{{self.dueDate | momentFromNow}}</mat-chip>
+      </mat-chip-list>
     </div>
   </div>
 
-  <div fxLayout="row">
-    <button mat-stroked-button color="accent" (click)="paste()" *ngIf="isPasteButtonVisible">
-      Paste <mat-icon>arrow_right_alt</mat-icon></button>
-  </div>
+  <div fxLayout="column" fxFlex class="todo-subtasks">
+    <div *ngIf="self" class="todo-heading">Sub tasks</div>
 
-  <div class="todo-lists" fxFlexFill fxLayout="column">
-    <div *ngFor="let todo of children | async">
-      <osmi-todo-list [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list>
-      <mat-divider></mat-divider>
+    <div class="osmi-todo-control" fxLayout="row" fxHide.lt-md fxLayoutGap="10px">
+      <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
+        <mat-form-field fxFlexFill>
+          <input #newList matInput [placeholder]="self ? 'Enter new sub task or list' : 'Enter  new task or list'" [value]="listInputValue | async"
+            (input)="updateListInputValue($event.target.value)" (keydown.enter)="addList()" [class.shaking]="isListInputShaking | async">
+        </mat-form-field>
+      </div>
+      <div fxLayoutAlign="center center">
+        <button mat-stroked-button color="accent" (click)="addList()">
+          <mat-icon>add</mat-icon> add</button>
+      </div>
     </div>
-    <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlexFill fxLayoutAlign="center center">
-      <mat-icon>list</mat-icon>
-      <span>This place looks empty</span>
-      <span class="small-hint">Add some tasks or lists to get started</span>
+
+
+    <div fxLayout="row">
+      <button mat-stroked-button color="accent" (click)="paste()" *ngIf="isPasteButtonVisible">
+        Paste
+        <mat-icon>arrow_right_alt</mat-icon>
+      </button>
     </div>
-  </div>
-  <div fxHide.gt-sm>
-    <button mat-fab color="accent" class="todo-mobile-add" (click)="openAddListDialog()">
-      <mat-icon>add</mat-icon>
-    </button>
+
+    <div class="todo-lists" fxFlex fxLayout="column">
+      <div *ngFor="let todo of children | async">
+        <osmi-todo-list [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list>
+        <mat-divider></mat-divider>
+      </div>
+      <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+        <mat-icon>list</mat-icon>
+        <span>This place looks empty</span>
+        <span class="small-hint">Add some tasks or lists to get started</span>
+      </div>
+    </div>
+    <div fxHide.gt-sm>
+      <button mat-fab color="accent" class="todo-mobile-add" (click)="openAddListDialog()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
