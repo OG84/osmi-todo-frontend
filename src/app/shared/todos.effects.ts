@@ -47,9 +47,15 @@ export class TodosEffects {
   upsert: Observable<TodosAction> = this.actions.pipe(
     ofType<Upsert>(TodosActionTypes.UPSERT),
     mergeMap(action => {
-      let apiUpsert = this.http.post<Todo>(`${environment.apiBasePath}todos`, action.todo);
+      let createNewTodoUrl = `${environment.apiBasePath}todos`;
+      if (action.copyChildrenFromId) {
+        createNewTodoUrl = `${createNewTodoUrl}?copyChildrenFromId=${action.copyChildrenFromId}`;
+      }
+
+      let apiUpsert = this.http.post<Todo>(createNewTodoUrl, action.todo);
       if (action.todo._id) {
-        apiUpsert = this.http.put<Todo>(`${environment.apiBasePath}todos/${action.todo._id}`, action.todo);
+        const updateTodoUrl = `${environment.apiBasePath}todos/${action.todo._id}`;
+        apiUpsert = this.http.put<Todo>(updateTodoUrl, action.todo);
       }
 
       return apiUpsert.pipe(
@@ -111,7 +117,7 @@ export class TodosEffects {
 
           return _todo;
         }),
-        tap(todo => this.todosService.upsert(todo)),
+        tap(todo => this.todosService.upsert(todo, action.clipboardAction.todoId)),
         map(x => new PasteSuccess(action.clipboardAction)),
         catchError(err => err)
       );

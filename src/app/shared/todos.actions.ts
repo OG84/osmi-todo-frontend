@@ -32,7 +32,7 @@ export interface ClipboardAction {
 export class Upsert implements Action {
   readonly type = TodosActionTypes.UPSERT;
 
-  constructor(public todo: Todo) { }
+  constructor(public todo: Todo, public copyChildrenFromId?: string) { }
 }
 
 export class UpsertSuccess implements Action {

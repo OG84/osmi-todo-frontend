@@ -22,8 +22,8 @@ export class TodosService {
 
   }
 
-  upsert(todo: Todo): void {
-    this.store.dispatch(new fromTodos.Upsert(todo));
+  upsert(todo: Todo, copyChildrenFromId?: string): void {
+    this.store.dispatch(new fromTodos.Upsert(todo, copyChildrenFromId));
   }
 
   delete(todo: Todo): void {
