@@ -19,7 +19,9 @@
           <mat-icon>arrow_right</mat-icon> Open menu</button>
     </mat-sidenav>
     <mat-sidenav-content>
-      <router-outlet></router-outlet>
+      <main> <!-- [@routerTransition]="getState(o)"-->
+        <router-outlet #o="outlet"></router-outlet>
+      </main>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
