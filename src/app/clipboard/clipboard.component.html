@@ -9,7 +9,7 @@
     <mat-list-item *ngFor="let action of clipboard | async">
       <div fxFlex>{{action.todoName}}</div>
       <div class="todo-clipboard-actions mobile" fxHide.gt-xs>
-        <mat-icon color="accent" [matMenuTriggerFor]="mobileMenu">dehaze</mat-icon>
+        <mat-icon color="accent" [matMenuTriggerFor]="mobileMenu">more_vert</mat-icon>
         <mat-menu #mobileMenu="matMenu">
           <button mat-menu-item (click)="pasteCopy(action)">
             create copy here
