@@ -1,4 +1,4 @@
-<div fxLayout="column">
+<div fxLayout="column" fxFlexFill>
   <div class="todo-primary-actions">
     <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" *ngIf="parent">
       <mat-icon>arrow_left</mat-icon> Back to {{parent?.name}}</button>
@@ -7,7 +7,7 @@
     <button mat-stroked-button color="accent" (click)="copySelf()" *ngIf="self">
       <mat-icon>file_copy</mat-icon> Copy {{self?.name}}</button>
   </div>
-  <div fxLayout="row" fxLayout.xs="column">
+  <div fxLayout="row" fxLayout.xs="column" fxFlex>
     <div class="todo-metadata" fxLayout="column" *ngIf="self">
       <mat-form-field>
         <input matInput placeholder="Name" [value]="self.name">
@@ -26,7 +26,7 @@
     <div fxLayout="column" fxFlex class="todo-subtasks">
       <div *ngIf="self" class="todo-heading">Sub tasks</div>
 
-      <div class="osmi-todo-control" fxLayout="row" fxHide.lt-md fxLayoutGap="10px">
+      <div class="osmi-todo-control" fxLayout="row" fxHide.lt-sm fxLayoutGap="10px">
         <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
           <mat-form-field fxFlexFill>
             <input #newList matInput [placeholder]="self ? 'Enter new sub task or list' : 'Enter  new task or list'" [value]="listInputValue | async"
@@ -39,20 +39,20 @@
         </div>
       </div>
 
-      <div fxLayout="row">
+      <div fxLayout="row" fxFlex>
         <div class="todo-lists" fxFlexFill fxLayout="column">
           <div class="todo-lists" fxFlex fxLayout="column">
             <div *ngFor="let todo of children | async">
               <osmi-todo-list [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list>
               <mat-divider></mat-divider>
             </div>
-            <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+            <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlex fxLayoutAlign="center center">
               <mat-icon>list</mat-icon>
               <span>This place looks empty</span>
               <span class="small-hint">Add some tasks or lists to get started</span>
             </div>
           </div>
-          <div fxHide.gt-sm>
+          <div fxHide.gt-xs>
             <button mat-fab color="accent" class="todo-mobile-add" (click)="openAddListDialog()">
               <mat-icon>add</mat-icon>
             </button>
