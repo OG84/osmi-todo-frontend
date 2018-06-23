@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Todo } from 'src/app/shared/todo.model';
 import { flatMap, map, withLatestFrom } from 'rxjs/operators';
 import { ClipboardAction, ClipboardActionType } from '../shared/todos.actions';
+import { MatBottomSheet } from '@angular/material';
 
 @Component({
   selector: 'osmi-clipboard',
@@ -14,7 +15,9 @@ import { ClipboardAction, ClipboardActionType } from '../shared/todos.actions';
 export class ClipboardComponent implements OnInit {
   clipboard: Observable<ClipboardAction[]>;
 
-  constructor(private readonly todosService: TodosService) { }
+  constructor(
+    private readonly todosService: TodosService,
+    private readonly bottomSheet: MatBottomSheet) { }
 
   ngOnInit() {
     this.clipboard = this.todosService.clipboard;
@@ -34,5 +37,9 @@ export class ClipboardComponent implements OnInit {
       type: ClipboardActionType.CUT
     };
     this.todosService.paste(pasteCutAction);
+  }
+
+  close(): void {
+    this.bottomSheet.dismiss();
   }
 }

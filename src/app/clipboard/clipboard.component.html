@@ -1,6 +1,9 @@
 <div class="todo-clipboard" fxLayout="column">
-  <div class="todo-clipboard-title" fxLayoutAlign="start center">Clipboard
-    <mat-icon>folder_open</mat-icon>
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <div class="todo-clipboard-title" fxLayoutAlign="start center" fxFlex>Clipboard
+      <mat-icon>folder_open</mat-icon>
+    </div>
+    <mat-icon color="primary" class="todo-clipboard-close" (click)="close()">close</mat-icon>
   </div>
   <mat-list>
     <mat-list-item *ngFor="let action of clipboard | async">

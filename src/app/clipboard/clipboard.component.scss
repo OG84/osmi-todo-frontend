@@ -6,6 +6,11 @@
     .todo-clipboard-title {
         font-size: 1.5em;
         padding: 10px 0 0 16px;
+        color: #3f51b5;
+    }
+
+    .todo-clipboard-close {
+        cursor: pointer;
     }
 
     button {
