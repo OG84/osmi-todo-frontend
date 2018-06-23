@@ -92,6 +92,7 @@ export const effects = [
     MatSnackBarModule,
     MatDatepickerModule,
     MatBottomSheetModule,
+    MatMenuModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       initialState: initialAppState

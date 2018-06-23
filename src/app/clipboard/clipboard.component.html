@@ -1,14 +1,30 @@
 <div class="todo-clipboard" fxLayout="column">
-  <div class="todo-clipboard-title" fxLayoutAlign="start center">Clipboard<mat-icon>folder_open</mat-icon></div>
+  <div class="todo-clipboard-title" fxLayoutAlign="start center">Clipboard
+    <mat-icon>folder_open</mat-icon>
+  </div>
   <mat-list>
     <mat-list-item *ngFor="let action of clipboard | async">
-      <div fxFlex><a [routerLink]="['/lists', action.todoId]">{{action.todoName}}</a></div>
-      <button mat-stroked-button color="accent" (click)="pasteCopy(action)">
-        create copy here
-      </button>
-      <button mat-stroked-button color="accent" (click)="pasteCut(action)">
-        move to here
-      </button>
+      <div fxFlex>{{action.todoName}}</div>
+      <div class="todo-clipboard-actions mobile" fxHide.gt-xs>
+        <mat-icon color="accent" [matMenuTriggerFor]="mobileMenu">dehaze</mat-icon>
+        <mat-menu #mobileMenu="matMenu">
+          <button mat-menu-item (click)="pasteCopy(action)">
+            create copy here
+          </button>
+          <button mat-menu-item (click)="pasteCut(action)">
+            move to here
+          </button>
+        </mat-menu>
+      </div>
+      <div class="todo-clipboard-actions" fxHide.xs>
+        <button mat-stroked-button color="accent" (click)="pasteCopy(action)">
+          create copy here
+        </button>
+        <button mat-stroked-button color="accent" (click)="pasteCut(action)">
+          move to here
+        </button>
+      </div>
+      <mat-divider></mat-divider>
     </mat-list-item>
   </mat-list>
 </div>
