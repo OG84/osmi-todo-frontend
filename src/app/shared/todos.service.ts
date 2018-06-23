@@ -6,13 +6,13 @@ import { Todo } from './todo.model';
 import {
   selectIsListInputShaking,
   selectListInputValue,
-  selectCopiedTodoIds,
-  selectCuttedTodoIds
+  selectClipboard
 } from './todos.selectors';
 import * as fromTodos from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { skip, first } from 'rxjs/operators';
+import { ClipboardActionType } from './todos.actions';
 
 @Injectable()
 export class TodosService {
@@ -31,15 +31,25 @@ export class TodosService {
   }
 
   copy(todo: Todo): void {
-    this.store.dispatch(new fromTodos.CopyAdd(todo._id));
+    const action: fromTodos.ClipboardAction = {
+      todoId: todo._id,
+      todoName: todo.name,
+      type: ClipboardActionType.COPY
+    };
+    this.store.dispatch(new fromTodos.ClipboardAdd(action));
   }
 
   cut(todo: Todo): void {
-    this.store.dispatch(new fromTodos.CutAdd(todo._id));
+    const action: fromTodos.ClipboardAction = {
+      todoId: todo._id,
+      todoName: todo.name,
+      type: ClipboardActionType.CUT
+    };
+    this.store.dispatch(new fromTodos.ClipboardAdd(action));
   }
 
-  paste(parentTodoId: string): void {
-    this.store.dispatch(new fromTodos.Paste(parentTodoId));
+  paste(action: fromTodos.ClipboardAction): void {
+    this.store.dispatch(new fromTodos.Paste(action));
   }
 
   get listInputValue(): Observable<string> {
@@ -50,12 +60,8 @@ export class TodosService {
     return this.store.select(selectIsListInputShaking);
   }
 
-  get copiedTodos(): Observable<string[]> {
-    return this.store.select(selectCopiedTodoIds);
-  }
-
-  get cuttedTodos(): Observable<string[]> {
-    return this.store.select(selectCuttedTodoIds);
+  get clipboard(): Observable<fromTodos.ClipboardAction[]> {
+    return this.store.select(selectClipboard);
   }
 
   updateListInputValue(value: string): void {

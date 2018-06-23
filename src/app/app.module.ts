@@ -1,7 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule, CustomSerializer } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {
   MatButtonModule,
@@ -20,17 +20,18 @@ import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
-  MatDatepickerModule
+  MatDatepickerModule,
+  MatBottomSheetModule
 } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TodoListsComponent } from './todo-lists/todo-lists.component';
 import { HomeComponent } from './home/home.component';
-import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
+import { StoreRouterConnectingModule, routerReducer, RouterStateSerializer } from '@ngrx/router-store';
 import { StoreModule, MetaReducer, ActionReducerMap } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { AppState } from 'src/app/app-state.model';
+import { AppState, initialAppState } from 'src/app/app-state.model';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -46,6 +47,7 @@ import { TodoListsEffects } from './todo-lists/todo-lists.effects';
 import { RouterStateUrl } from './app-routing.module';
 import { MomentPipe, MomentFromNowPipe } from './shared/moment.pipes';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { ClipboardComponent } from 'src/app/clipboard/clipboard.component';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
@@ -67,7 +69,8 @@ export const effects = [
     HomeComponent,
     EnterNameDialogComponent,
     MomentPipe,
-    MomentFromNowPipe
+    MomentFromNowPipe,
+    ClipboardComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -82,18 +85,24 @@ export const effects = [
     MatMenuModule,
     MatListModule,
     MatToolbarModule,
-    MatCardModule,
     MatDialogModule,
     MatChipsModule,
     MatCheckboxModule,
     MatTooltipModule,
     MatSnackBarModule,
     MatDatepickerModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
+    MatBottomSheetModule,
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      initialState: initialAppState
+    }),
     EffectsModule.forRoot(effects),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production
+    }),
+    StoreRouterConnectingModule.forRoot({
+      stateKey: 'router',
     }),
     HttpClientModule
   ],
@@ -102,9 +111,11 @@ export const effects = [
     ToolbarService,
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    { provide: RouterStateSerializer, useClass: CustomSerializer }
   ],
   entryComponents: [
-    EnterNameDialogComponent
+    EnterNameDialogComponent,
+    ClipboardComponent
   ],
   bootstrap: [AppComponent]
 })

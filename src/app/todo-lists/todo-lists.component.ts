@@ -38,7 +38,6 @@ export class TodoListsComponent implements OnInit {
   isSelectionActive = false;
   isSingleSelectionActive = false;
   isListEmpty = false;
-  isPasteButtonVisible = false;
 
   children: Observable<Todo[]>;
   self: Todo;
@@ -65,12 +64,6 @@ export class TodoListsComponent implements OnInit {
     this.children.subscribe(x => {
       this.isListEmpty = !x || x.length === 0;
     });
-
-    this.todosService.copiedTodos.pipe(
-      combineLatest(this.todosService.cuttedTodos, this.children)
-    ).subscribe(([copied, cutted, currentChildren]) =>
-      this.isPasteButtonVisible = copied.length > 0 || cutted.length > 0
-    );
   }
 
   get listInputValue(): Observable<string> {
@@ -112,10 +105,6 @@ export class TodoListsComponent implements OnInit {
     });
   }
 
-  paste(): void {
-    this.todosService.paste(this.self ? this.self._id : null);
-  }
-
   openAddListDialog(): void {
     const dialogRef = this.dialog.open(EnterNameDialogComponent);
     dialogRef.afterClosed().subscribe(dialogResult => {
@@ -125,6 +114,14 @@ export class TodoListsComponent implements OnInit {
       const newTodo: Todo = { name: dialogResult.name, parentId: this.self ? this.self._id : null };
       this.todosService.upsert(newTodo);
     });
+  }
+
+  copySelf(): void {
+    if (!this.self) {
+      return;
+    }
+
+    this.todosService.copy(this.self);
   }
 
   /*nextList(): void {

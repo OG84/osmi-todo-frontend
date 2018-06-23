@@ -21,16 +21,13 @@
   <button mat-icon-button color="accent" (click)="copy()" matTooltip="Copy" *ngIf="!isEditing">
     <mat-icon aria-label="copy list">file_copy</mat-icon>
   </button>
-  <button mat-icon-button color="accent" (click)="cut()" matTooltip="Cut and move" *ngIf="!isEditing">
-    <mat-icon aria-label="copy list">arrow_right_alt</mat-icon>
-  </button>
-  <button mat-icon-button color="accent" (click)="editList()" *ngIf="!isEditing">
+  <button mat-icon-button color="accent" (click)="editList()" matTooltip="Edit" *ngIf="!isEditing">
     <mat-icon aria-label="edit list">edit</mat-icon>
   </button>
-  <button mat-icon-button color="accent" (click)="deleteList()" *ngIf="!isEditing">
+  <button mat-icon-button color="accent" (click)="deleteList()" matTooltip="Delete" *ngIf="!isEditing">
     <mat-icon aria-label="delete list">delete</mat-icon>
   </button>
-  <button mat-icon-button color="accent" *ngIf="isEditing" (click)="updateList()">
+  <button mat-icon-button color="accent" *ngIf="isEditing" matTooltip="Save" (click)="updateList()">
     <mat-icon aria-label="delete list">check</mat-icon>
   </button>
 </div>

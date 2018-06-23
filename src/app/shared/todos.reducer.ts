@@ -5,8 +5,7 @@ import { Todo } from './todo.model';
 export const initialTodosState: TodosState = {
   listInputValue: '',
   isListInputShaking: false,
-  copiedTodoIds: [],
-  cuttedTodoIds: []
+  clipboard: []
 };
 
 export function todosReducer(state: TodosState = initialTodosState, action: TodosAction): TodosState {
@@ -26,51 +25,29 @@ export function todosReducer(state: TodosState = initialTodosState, action: Todo
         ...state,
         isListInputShaking: false
       };
-    case TodosActionTypes.COPY_ADD:
-      const newCopiedTodoIds = [...state.copiedTodoIds];
-      let existingIndex = newCopiedTodoIds.findIndex(x => x === action.todoId);
+    case TodosActionTypes.CLIPBOARD_ADD:
+      const newClipboard = [...state.clipboard];
+      const existingIndex = newClipboard.findIndex(x => x.todoId === action.clipboardAction.todoId);
 
       if (existingIndex > -1) {
-        newCopiedTodoIds[existingIndex] = action.todoId;
+        newClipboard[existingIndex] = action.clipboardAction;
       } else {
-        newCopiedTodoIds.push(action.todoId);
+        newClipboard.push(action.clipboardAction);
       }
 
       return {
         ...state,
-        copiedTodoIds: newCopiedTodoIds,
-        cuttedTodoIds: state.cuttedTodoIds.filter(x => x !== action.todoId)
+        clipboard: newClipboard
       };
-    case TodosActionTypes.COPY_REMOVE:
+    case TodosActionTypes.CLIPBOARD_REMOVE:
       return {
         ...state,
-        copiedTodoIds: state.copiedTodoIds.filter(x => x !== action.todoId)
+        clipboard: state.clipboard.filter(x => x.todoId !== action.todoId)
       };
-    case TodosActionTypes.CUT_ADD:
-      const newCuttedTodoIds = [...state.cuttedTodoIds];
-      existingIndex = newCuttedTodoIds.findIndex(x => x === action.todoId);
-
-      if (existingIndex > -1) {
-        newCuttedTodoIds[existingIndex] = action.todoId;
-      } else {
-        newCuttedTodoIds.push(action.todoId);
-      }
-
+    case TodosActionTypes.CLIPBOARD_CLEAR:
       return {
         ...state,
-        copiedTodoIds: state.copiedTodoIds.filter(x => x !== action.todoId),
-        cuttedTodoIds: newCuttedTodoIds
-      };
-    case TodosActionTypes.CUT_REMOVE:
-      return {
-        ...state,
-        cuttedTodoIds: state.cuttedTodoIds.filter(x => x !== action.todoId)
-      };
-    case TodosActionTypes.PASTE_SUCCESS:
-      return {
-        ...state,
-        copiedTodoIds: [],
-        cuttedTodoIds: []
+        clipboard: []
       };
     default:
       return state;

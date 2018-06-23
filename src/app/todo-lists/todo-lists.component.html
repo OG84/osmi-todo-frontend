@@ -1,9 +1,11 @@
 <div fxLayout="column">
-  <div class="todo-backlinks">
+  <div class="todo-primary-actions">
     <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" *ngIf="parent">
       <mat-icon>arrow_left</mat-icon> Back to {{parent?.name}}</button>
     <button mat-stroked-button color="primary" [routerLink]="['/lists']" *ngIf="self && !parent">
       <mat-icon>arrow_left</mat-icon> Back to overview</button>
+    <button mat-stroked-button color="accent" (click)="copySelf()" *ngIf="self">
+      <mat-icon>file_copy</mat-icon> Copy {{self?.name}}</button>
   </div>
 
   <div class="todo-metadata" fxLayout="column" *ngIf="self">
@@ -33,11 +35,6 @@
       <button mat-stroked-button color="accent" (click)="addList()">
         <mat-icon>add</mat-icon> add</button>
     </div>
-  </div>
-
-  <div fxLayout="row">
-    <button mat-stroked-button color="accent" (click)="paste()" *ngIf="isPasteButtonVisible">
-      Paste <mat-icon>arrow_right_alt</mat-icon></button>
   </div>
 
   <div class="todo-lists" fxFlexFill fxLayout="column">

@@ -11,12 +11,22 @@ export enum TodosActionTypes {
   LIST_INPUT_SHAKING_START = '[todos] list input shaking start',
   LIST_INPUT_SHAKING_STOP = '[todos] list input shaking stop',
   LIST_INPUT_VALUE_CHANGED = '[todos] list input value changed',
-  COPY_ADD = '[todos] copy add',
-  COPY_REMOVE = '[todos] copy remove',
-  CUT_ADD = '[todos] cut add',
-  CUT_REMOVE = '[todos] cut remove',
+  CLIPBOARD_ADD = '[todos] clipboard add',
+  CLIPBOARD_REMOVE = '[todos] clipboard remove',
+  CLIPBOARD_CLEAR = '[todos] clipboard clear',
   PASTE = '[todos] paste',
   PASTE_SUCCESS = '[todos] paste success'
+}
+
+export enum ClipboardActionType {
+  COPY = 'COPY',
+  CUT = 'CUT'
+}
+
+export interface ClipboardAction {
+  todoId: string;
+  todoName: string;
+  type: ClipboardActionType;
 }
 
 export class Upsert implements Action {
@@ -67,40 +77,34 @@ export class ListInputValueChanged implements Action {
   constructor(public value: string) { }
 }
 
-export class CopyAdd implements Action {
-  readonly type = TodosActionTypes.COPY_ADD;
+export class ClipboardAdd implements Action {
+  readonly type = TodosActionTypes.CLIPBOARD_ADD;
+
+  constructor(public clipboardAction: ClipboardAction) { }
+}
+
+export class ClipboardRemove implements Action {
+  readonly type = TodosActionTypes.CLIPBOARD_REMOVE;
 
   constructor(public todoId: string) { }
 }
 
-export class CopyRemove implements Action {
-  readonly type = TodosActionTypes.COPY_REMOVE;
+export class ClipboardClear implements Action {
+  readonly type = TodosActionTypes.CLIPBOARD_CLEAR;
 
-  constructor(public todoId: string) { }
-}
-
-export class CutAdd implements Action {
-  readonly type = TodosActionTypes.CUT_ADD;
-
-  constructor(public todoId: string) { }
-}
-
-export class CutRemove implements Action {
-  readonly type = TodosActionTypes.CUT_REMOVE;
-
-  constructor(public todoId: string) { }
+  constructor() { }
 }
 
 export class Paste implements Action {
   readonly type = TodosActionTypes.PASTE;
 
-  constructor(public parentTodoId: string) { }
+  constructor(public clipboardAction: ClipboardAction) { }
 }
 
 export class PasteSuccess implements Action {
   readonly type = TodosActionTypes.PASTE_SUCCESS;
 
-  constructor() { }
+  constructor(public clipboardAction: ClipboardAction) { }
 }
 
 export type TodosAction = Upsert |
@@ -112,9 +116,8 @@ export type TodosAction = Upsert |
   ListInputShakingStart |
   ListInputShakingStop |
   ListInputValueChanged |
-  CopyAdd |
-  CopyRemove |
-  CutAdd |
-  CutRemove |
+  ClipboardAdd |
+  ClipboardRemove |
+  ClipboardClear |
   Paste |
   PasteSuccess;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Effect, Actions, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { Observable, of, timer, EMPTY } from 'rxjs';
-import { map, mergeMap, catchError, tap, combineLatest, first, last, skip, withLatestFrom } from 'rxjs/operators';
+import { map, mergeMap, catchError, tap, combineLatest, first, last, skip, withLatestFrom, switchMap } from 'rxjs/operators';
 import {
   TodosActionTypes,
   TodosAction,
@@ -17,14 +17,19 @@ import {
   ListInputValueChanged,
   Paste,
   PasteSuccess,
+  ClipboardActionType,
+  ClipboardAdd,
+  ClipboardRemove,
+  ClipboardClear
 } from './todos.actions';
 import { environment } from 'src/environments/environment';
 import { Todo } from 'src/app/shared/todo.model';
 import { AppState } from '../app-state.model';
 import { TodosService } from './todos.service';
 import { Store, Action } from '@ngrx/store';
-import { MatSnackBar } from '@angular/material';
-import { selectCopiedTodoIds } from './todos.selectors';
+import { MatSnackBar, MatBottomSheet, MatBottomSheetConfig, MatBottomSheetRef } from '@angular/material';
+import { ClipboardComponent } from '../clipboard/clipboard.component';
+import { selectRouterParams } from '../router.selectors';
 
 @Injectable()
 export class TodosEffects {
@@ -33,7 +38,8 @@ export class TodosEffects {
     private readonly http: HttpClient,
     private readonly store: Store<AppState>,
     private readonly todosService: TodosService,
-    private readonly snackbar: MatSnackBar) {
+    private readonly snackbar: MatSnackBar,
+    private readonly bottomSheet: MatBottomSheet) {
 
   }
 
@@ -73,53 +79,74 @@ export class TodosEffects {
   delete: Observable<TodosAction> = this.actions.pipe(
     ofType(TodosActionTypes.DELETE),
     mergeMap((action: Delete) => {
-      return this.http.delete<Todo>(`${environment.apiBasePath}todos/${action.todo._id}`).pipe(
-        map(() => new DeleteSuccess(action.todo._id)),
-        catchError(() => of(new DeleteFailure(action.todo._id)))
-      );
+      return this.http.delete<Todo>(
+        `${environment.apiBasePath}todos/${action.todo._id}`).pipe(
+          map(() => new DeleteSuccess(action.todo._id)),
+          catchError(() => of(new DeleteFailure(action.todo._id)))
+        );
     })
   );
 
   @Effect()
   paste = this.actions.pipe(
     ofType<Paste>(TodosActionTypes.PASTE),
-    withLatestFrom(
-      this.todosService.copiedTodos,
-      this.todosService.cuttedTodos
-    ),
-    tap(([action, copied, cutted]) => {
-      cutted.forEach(x => {
-        this.http.get<Todo>(`${environment.apiBasePath}todos/${x}`).pipe(
-          withLatestFrom(action.parentTodoId ? this.http.get<Todo>(`${environment.apiBasePath}todos/${action.parentTodoId}`) : of(null)),
-          map(([todo, parentTodo]) => {
-            return {
-              ...todo,
-              parentId: action.parentTodoId,
-              dueDate: parentTodo ? parentTodo.dueDate : todo.dueDate
-            };
-          }),
-          tap(todo => this.todosService.upsert(todo)),
-          catchError(err => err)
-        ).subscribe();
-      });
+    withLatestFrom(this.store.select(selectRouterParams)),
+    mergeMap(([action, routerParams]) => {
+      const parentTodoId = routerParams.todoId;
 
-      copied.forEach(x => {
-        this.http.get<Todo>(`${environment.apiBasePath}todos/${x}`).pipe(
-          withLatestFrom(action.parentTodoId ? this.http.get<Todo>(`${environment.apiBasePath}todos/${action.parentTodoId}`) : of(null)),
-          map(([todo, parentTodo]) => {
-            return {
-              ...todo,
-              _id: null,
-              parentId: action.parentTodoId,
-              name: `${todo.name} Kopie`,
-              dueDate: parentTodo ? parentTodo.dueDate : todo.dueDate
-            };
-          }),
-          tap(todo => this.todosService.upsert(todo)),
-          catchError(err => err)
-        ).subscribe();
-      });
-    }),
-    map(x => new PasteSuccess())
+      return this.http.get<Todo>(`${environment.apiBasePath}todos/${action.clipboardAction.todoId}`).pipe(
+        withLatestFrom(parentTodoId ? this.http.get<Todo>(
+          `${environment.apiBasePath}todos/${parentTodoId}`) : of(null)),
+        map(([todo, parentTodo]) => {
+          const _todo = {
+            ...todo,
+            // no id = api creates new todo (copy), with id = api updates todo (cut)
+            _id: action.clipboardAction.type === ClipboardActionType.COPY ? null : todo._id,
+            parentId: parentTodoId,
+            name: action.clipboardAction.type === ClipboardActionType.COPY ? `${todo.name} Kopie` : todo.name,
+            dueDate: parentTodo ? parentTodo.dueDate : todo.dueDate
+          };
+
+          console.log(_todo);
+
+          return _todo;
+        }),
+        tap(todo => this.todosService.upsert(todo)),
+        map(x => new PasteSuccess(action.clipboardAction)),
+        catchError(err => err)
+      );
+    })
   );
+
+  @Effect()
+  pasteSuccess = this.actions.pipe(
+    ofType<PasteSuccess>(TodosActionTypes.PASTE_SUCCESS),
+    map(x => new ClipboardRemove(x.clipboardAction.todoId))
+  );
+
+  @Effect({ dispatch: false })
+  clipboardChanged = this.todosService.clipboard.pipe(
+    tap(clipboard => {
+      const currentRef = this.bottomSheet._openedBottomSheetRef;
+
+      if (currentRef && clipboard.length === 0) {
+        this.bottomSheet._openedBottomSheetRef.dismiss();
+        return;
+      }
+
+      if (currentRef && clipboard.length > 0) {
+        return;
+      }
+
+      if (clipboard.length === 0) {
+        return;
+      }
+
+      const config: MatBottomSheetConfig = {
+        hasBackdrop: false
+      };
+      this.bottomSheet.open(ClipboardComponent, config);
+    })
+  );
+
 }
