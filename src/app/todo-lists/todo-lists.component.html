@@ -23,7 +23,7 @@
       <mat-chip>due {{self.dueDate | momentFromNow}}</mat-chip>
     </mat-chip-list>
   </div>
-  <div fxLayout="column" fxFlex class="todo-subtasks">
+  <div fxLayout="column" class="todo-subtasks">
     <div *ngIf="self" class="todo-heading">Sub tasks</div>
 
     <osmi-todo-input [parentTodo]="self" fxHide.lt-sm></osmi-todo-input>

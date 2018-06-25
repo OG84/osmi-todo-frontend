@@ -37,13 +37,15 @@ export class TodoInputComponent implements OnInit {
 
   addList(): void {
     const inputText: string = this.todoInputControl.nativeElement.value;
-    const chronoResult = chrono.parse(inputText);
+    const chronoResult = chrono.parse(inputText) as Array<any>;
     const chronoDateResult = chrono.parseDate(inputText);
-    const chronoText = chronoResult[0].text as string;
-    const chronoDate = chronoDateResult as Date;
-    const newTodoName = inputText.replace(chronoText, '').trim();
+    let chronoText, chronoDate;
+    if (chronoDateResult) {
+      chronoText = chronoResult[0].text as string;
+      chronoDate = chronoDateResult as Date;
+    }
 
-    console.log(chronoDate, chronoResult);
+    const newTodoName = inputText.replace(chronoText, '').trim();
 
     if (!inputText || inputText === '') {
       return;
@@ -52,7 +54,7 @@ export class TodoInputComponent implements OnInit {
     const newTodo: Todo = {
       name: newTodoName,
       parentId: this.parentTodo ? this.parentTodo._id : null,
-      dueDate: chronoDate.toUTCString()
+      dueDate: chronoDate ? chronoDate.toUTCString() : null
     };
     this.todosService.upsert(newTodo);
   }
