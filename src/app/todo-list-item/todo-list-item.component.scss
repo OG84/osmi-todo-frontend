@@ -1,14 +1,31 @@
 :host {
     .osmi-todo-list {
-      padding: 10px 0;
-      cursor: pointer;
+        padding: 10px 0;
+        cursor: pointer;
 
-      &:hover {
-        background-color: white;
-      }
+        &:hover {
+            background-color: white;
+        }
     }
 
     .todo-duedate {
-      font-size: 0.5em;
+        font-size: .5em;
+        line-height: .5em;
+    }
+
+    mat-icon.todo-important {
+        font-size: 2rem;
+        padding: 0 25px 0 0;
+        line-height: 2rem;
+
+        &.upcoming {
+            }
+
+        &.due {
+
+        }
+
+        &.overdue {
+            }
     }
 }

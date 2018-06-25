@@ -25,7 +25,7 @@
     <div fxLayout="column" fxFlex class="todo-subtasks">
       <div *ngIf="self" class="todo-heading">Sub tasks</div>
 
-      <osmi-todo-input [parentTodo]="self"></osmi-todo-input>
+      <osmi-todo-input [parentTodo]="self" fxHide.lt-sm></osmi-todo-input>
 
       <div fxLayout="row" fxFlex>
         <div class="todo-lists" fxFlexFill fxLayout="column">

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TodosService } from 'src/app/shared/todos.service';
 import { Todo } from 'src/app/shared/todo.model';
+import * as chrono from 'chrono-node';
 
 @Component({
   selector: 'osmi-todo-input',
@@ -11,10 +12,12 @@ import { Todo } from 'src/app/shared/todo.model';
 
 export class TodoInputComponent implements OnInit {
   @ViewChild('newList')
-  newListInput: ElementRef;
+  todoInputControl: ElementRef;
 
   @Input()
   parentTodo: Todo;
+
+  chronoDate: string;
 
   constructor(private readonly todosService: TodosService) { }
 
@@ -33,12 +36,24 @@ export class TodoInputComponent implements OnInit {
   }
 
   addList(): void {
-    const newListName = this.newListInput.nativeElement.value;
-    if (!newListName || newListName.trim() === '') {
+    const inputText: string = this.todoInputControl.nativeElement.value;
+    const chronoResult = chrono.parse(inputText);
+    const chronoDateResult = chrono.parseDate(inputText);
+    const chronoText = chronoResult[0].text as string;
+    const chronoDate = chronoDateResult as Date;
+    const newTodoName = inputText.replace(chronoText, '').trim();
+
+    console.log(chronoDate, chronoResult);
+
+    if (!inputText || inputText === '') {
       return;
     }
 
-    const newTodo: Todo = { name: newListName, parentId: this.parentTodo ? this.parentTodo._id : null };
+    const newTodo: Todo = {
+      name: newTodoName,
+      parentId: this.parentTodo ? this.parentTodo._id : null,
+      dueDate: chronoDate.toUTCString()
+    };
     this.todosService.upsert(newTodo);
   }
 }
