@@ -32,7 +32,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
 import { AppState, initialAppState } from 'src/app/app-state.model';
-import { TodoListComponent } from './todo-list/todo-list.component';
+import { TodoListItemComponent } from './todo-list-item/todo-list-item.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { todosReducer } from './shared/todos.reducer';
@@ -66,7 +66,7 @@ export const effects = [
   declarations: [
     AppComponent,
     TodoListsComponent,
-    TodoListComponent,
+    TodoListItemComponent,
     HomeComponent,
     EnterNameDialogComponent,
     MomentPipe,

@@ -9,12 +9,12 @@ import { Moment } from 'moment';
 import * as moment from 'moment';
 
 @Component({
-  selector: 'osmi-todo-list',
-  templateUrl: 'todo-list.component.html',
-  styleUrls: ['todo-list.component.scss']
+  selector: 'osmi-todo-list-item',
+  templateUrl: 'todo-list-item.component.html',
+  styleUrls: ['todo-list-item.component.scss']
 })
 
-export class TodoListComponent implements OnInit, OnChanges, AfterViewInit {
+export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
   todo: Todo;
   isEditing = false;

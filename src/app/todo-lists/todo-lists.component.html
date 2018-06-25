@@ -31,7 +31,7 @@
         <div class="todo-lists" fxFlexFill fxLayout="column">
           <div class="todo-lists" fxFlex fxLayout="column">
             <div *ngFor="let todo of children | async">
-              <osmi-todo-list [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list>
+              <osmi-todo-list-item [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list-item>
               <mat-divider></mat-divider>
             </div>
             <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlex fxLayoutAlign="center center">
