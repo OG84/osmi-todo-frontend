@@ -11,12 +11,11 @@
   </div>
 
   <div fxLayout="row" fxLayout.xs="column" fxFlex *ngIf="!isEditing" [routerLink]="['/lists', todo._id]">
-    <div fxLayout="row" fxLayoutAlign="start center" fxFlex>
-      <mat-icon color="primary" class="todo-important">report_problem_outline</mat-icon>
+    <div fxLayout="row" fxFlex>
       <div fxFlex>{{todo?.name}}</div>
     </div>
     <mat-chip-list *ngIf="todo.dueDate" fxHide.xs>
-      <mat-chip>{{todo.dueDate | momentFromNow}}</mat-chip>
+      <mat-chip><mat-icon color="primary" class="todo-important" *ngIf="isImportant" matTooltip="Less than 24 hours">priority_high</mat-icon> {{todo.dueDate | momentFromNow}}</mat-chip>
     </mat-chip-list>
     <div class="todo-duedate" *ngIf="todo.dueDate" fxHide.gt-xs>due {{todo.dueDate | momentFromNow}}</div>
   </div>

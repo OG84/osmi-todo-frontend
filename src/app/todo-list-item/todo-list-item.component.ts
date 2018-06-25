@@ -20,6 +20,7 @@ export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
   isEditing = false;
   name: string;
   dueDate: Moment;
+  isImportant = false;
 
   @Output()
   updated = new EventEmitter<Todo>();
@@ -39,6 +40,8 @@ export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnChanges(): void {
     this.name = this.todo.name;
     this.dueDate = moment(this.todo.dueDate);
+    const dateIn24Hours = moment().add(24, 'h');
+    this.isImportant = this.dueDate.isBefore(dateIn24Hours);
   }
 
   ngAfterViewInit(): void {

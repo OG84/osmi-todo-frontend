@@ -14,18 +14,8 @@
     }
 
     mat-icon.todo-important {
-        font-size: 2rem;
-        padding: 0 25px 0 0;
-        line-height: 2rem;
-
-        &.upcoming {
-            }
-
-        &.due {
-
-        }
-
-        &.overdue {
-            }
+        font-size: 1.5em;
+        padding: 0 5px 0 0;
+        line-height: 1.5em;
     }
 }
