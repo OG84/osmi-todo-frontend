@@ -1,0 +1,36 @@
+:host {
+    .add-new-list {
+        cursor: pointer;
+        color: rgba(0,0,0,0.6);
+        margin: 0 10px 0 0;
+
+        &:hover {
+            color: black;
+        }
+
+        mat-icon {
+            width: 1em;
+            height: 1em;
+            font-size: 1em;
+            padding: 0 10px 0 0;
+        }
+    }
+
+    .shaking {
+        color: red;
+        animation: shaking .2s infinite;
+    }
+    @keyframes shaking {
+        0% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(10px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+    }
+}

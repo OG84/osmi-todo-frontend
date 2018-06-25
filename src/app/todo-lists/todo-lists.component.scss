@@ -3,45 +3,9 @@
         color: rgba(0,0,0,0.1);
 
         .osmi-todo-control {
-            padding: 0 0 10px;
-
-            .osmi-todo-control-action {
-                margin: 0 10px 0 0;
-            }
-        }
-
-        .add-new-list {
-            cursor: pointer;
-            color: rgba(0,0,0,0.6);
-            margin: 0 10px 0 0;
-
             &.selected {
                 border: 2px dashed rgba(255, 0, 0, 0.5);
                 animation: pulsate 1s ease-out infinite;
-            }
-
-            &:hover {
-                color: black;
-            }
-
-            mat-icon {
-                width: 1em;
-                height: 1em;
-                font-size: 1em;
-                padding: 0 10px 0 0;
-            }
-        }
-        @keyframes pulsate {
-            0% {
-                border-color: rgba(255, 0, 0, 0.2);
-            }
-
-            50% {
-                border-color: rgba(255, 0, 0, 0.5);
-            }
-
-            100% {
-                border-color: rgba(255, 0, 0, 0.2);
             }
         }
 
@@ -100,22 +64,17 @@
             font-size: 150px;
         }
     }
-
-    .shaking {
-        color: red;
-        animation: shaking .2s infinite;
-    }
-    @keyframes shaking {
+    @keyframes pulsate {
         0% {
-            transform: translateX(0);
+            border-color: rgba(255, 0, 0, 0.2);
         }
 
         50% {
-            transform: translateX(10px);
+            border-color: rgba(255, 0, 0, 0.5);
         }
 
         100% {
-            transform: translateX(0);
+            border-color: rgba(255, 0, 0, 0.2);
         }
     }
 }

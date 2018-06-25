@@ -1,0 +1,12 @@
+<div class="osmi-todo-control" fxLayout="row" fxHide.lt-sm fxLayoutGap="10px">
+  <div class="add-new-list" fxFlex fxLayout="row">
+    <mat-form-field fxFlexFill>
+      <input #newList matInput [placeholder]="parentTodo ? 'Enter new sub task or list' : 'Enter new task or list'" [value]="listInputValue | async"
+        (input)="updateListInputValue($event.target.value)" (keydown.enter)="addList()" [class.shaking]="isListInputShaking | async">
+    </mat-form-field>
+  </div>
+  <div fxLayoutAlign="center center">
+    <button mat-stroked-button color="accent" (click)="addList()">
+      <mat-icon>add</mat-icon> add</button>
+  </div>
+</div>

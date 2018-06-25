@@ -22,22 +22,10 @@
       </mat-chip-list>
     </div>
 
-
     <div fxLayout="column" fxFlex class="todo-subtasks">
       <div *ngIf="self" class="todo-heading">Sub tasks</div>
 
-      <div class="osmi-todo-control" fxLayout="row" fxHide.lt-sm fxLayoutGap="10px">
-        <div class="add-new-list" [class.selected]="isKeyboardMode && isAddNewListSelected" fxFlex fxLayout="row">
-          <mat-form-field fxFlexFill>
-            <input #newList matInput [placeholder]="self ? 'Enter new sub task or list' : 'Enter  new task or list'" [value]="listInputValue | async"
-              (input)="updateListInputValue($event.target.value)" (keydown.enter)="addList()" [class.shaking]="isListInputShaking | async">
-          </mat-form-field>
-        </div>
-        <div fxLayoutAlign="center center">
-          <button mat-stroked-button color="accent" (click)="addList()">
-            <mat-icon>add</mat-icon> add</button>
-        </div>
-      </div>
+      <osmi-todo-input [parentTodo]="self"></osmi-todo-input>
 
       <div fxLayout="row" fxFlex>
         <div class="todo-lists" fxFlexFill fxLayout="column">

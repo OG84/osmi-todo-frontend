@@ -48,6 +48,7 @@ import { RouterStateUrl } from './app-routing.module';
 import { MomentPipe, MomentFromNowPipe } from './shared/moment.pipes';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { ClipboardComponent } from 'src/app/clipboard/clipboard.component';
+import { TodoInputComponent } from './todo-input/todo-input.component';
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
 export const reducers: ActionReducerMap<AppState> = {
@@ -70,7 +71,8 @@ export const effects = [
     EnterNameDialogComponent,
     MomentPipe,
     MomentFromNowPipe,
-    ClipboardComponent
+    ClipboardComponent,
+    TodoInputComponent
   ],
   imports: [
     BrowserAnimationsModule,

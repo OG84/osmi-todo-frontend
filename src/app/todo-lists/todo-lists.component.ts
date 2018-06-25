@@ -33,18 +33,11 @@ export class TodoListsComponent implements OnInit {
   readonly RIGHT_ARROW = 39;
   readonly DOWN_ARROW = 40;
 
-  isAddNewListSelected = true;
-  isKeyboardMode = false;
-  isSelectionActive = false;
-  isSingleSelectionActive = false;
   isListEmpty = false;
 
   children: Observable<Todo[]>;
   self: Todo;
   parent: Todo;
-
-  @ViewChild('newList')
-  newListInput: ElementRef;
 
   constructor(
     private readonly router: Router,
@@ -66,31 +59,7 @@ export class TodoListsComponent implements OnInit {
     });
   }
 
-  get listInputValue(): Observable<string> {
-    return this.todosService.listInputValue;
-  }
-
-  get isListInputShaking(): Observable<boolean> {
-    return this.todosService.isListInputShaking;
-  }
-
-  updateListInputValue(value: string): void {
-    this.todosService.updateListInputValue(value);
-  }
-
-  addList(): void {
-    const newListName = this.newListInput.nativeElement.value;
-    if (!newListName || newListName.trim() === '') {
-      return;
-    }
-
-    const newTodo: Todo = { name: newListName, parentId: this.self ? this.self._id : null };
-    this.todosService.upsert(newTodo);
-  }
-
   upsertTodo(todo: Todo): void {
-    console.log('upsert by event', todo);
-
     this.todosService.upsert(todo);
   }
 
