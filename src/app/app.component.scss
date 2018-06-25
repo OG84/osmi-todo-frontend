@@ -1,4 +1,9 @@
 :host {
+    main {
+        max-width: 800px;
+        margin: auto;
+    }
+
     mat-sidenav {
         width: 300px;
         padding: 10px;

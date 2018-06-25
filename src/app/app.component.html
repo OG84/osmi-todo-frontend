@@ -6,10 +6,10 @@
     <div class="osmi-todo-toolbar-title" fxLayoutAlign="start center" fxFlex>
       <span>Thodo Manager</span>
     </div>
-    <span>v0.05</span>
+    <span>v0.06</span>
   </mat-toolbar>
   <mat-sidenav-container>
-    <mat-sidenav [mode]="sidenavMode" [opened]="!isMobile" #sidenav fxLayout="column">
+    <mat-sidenav [mode]="sidenavMode" [opened]="false" #sidenav fxLayout="column">
       <div class="osmi-todo-logo" fxLayoutAlign="center center">
         <img src="assets/thodo-logo.svg">
       </div>
@@ -22,7 +22,9 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <!-- [@routerTransition]="getState(o)"-->
-      <router-outlet #o="outlet"></router-outlet>
+      <main>
+        <router-outlet #o="outlet"></router-outlet>
+      </main>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
