@@ -1,4 +1,4 @@
-<div fxLayout="column" fxFlexFill>
+<div fxLayout="column">
   <div class="todo-primary-actions">
     <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" *ngIf="parent">
       <mat-icon>arrow_left</mat-icon> Back to {{parent?.name}}</button>
@@ -28,24 +28,23 @@
 
     <osmi-todo-input [parentTodo]="self" fxHide.lt-sm></osmi-todo-input>
 
-    <div fxLayout="row" fxFlex>
-      <div class="todo-lists" fxFlexFill fxLayout="column">
-        <div class="todo-lists" fxFlex fxLayout="column">
-          <div *ngFor="let todo of children | async">
-            <osmi-todo-list-item [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list-item>
-            <mat-divider></mat-divider>
-          </div>
-          <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxFlex fxLayoutAlign="center center">
-            <mat-icon>list</mat-icon>
-            <span>This place looks empty</span>
-            <span class="small-hint">Add some tasks or lists to get started</span>
-          </div>
+    <div class="todo-lists" fxFlex fxLayout="column">
+      <div class="todo-lists" fxFlex fxLayout="column">
+        <div *ngFor="let todo of children | async">
+          <osmi-todo-list-item [todo]="todo" (updated)="upsertTodo($event)" (deleted)="deleteTodo($event)"></osmi-todo-list-item>
+          <mat-divider></mat-divider>
         </div>
-        <div fxHide.gt-xs>
-          <button mat-fab color="accent" class="todo-mobile-add" (click)="openAddListDialog()">
-            <mat-icon>add</mat-icon>
-          </button>
-        </div>
+      </div>
+      <div fxHide.gt-xs>
+        <button mat-fab color="accent" class="todo-mobile-add" (click)="openAddListDialog()">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
     </div>
   </div>
+  <div *ngIf="isListEmpty" class="osmi-todo-empty-list" fxLayout="column" fxLayoutAlign="center center">
+    <mat-icon>list</mat-icon>
+    <span>This place looks empty</span>
+    <span class="small-hint">Add some tasks or lists to get started</span>
+  </div>
+</div>
