@@ -12,7 +12,7 @@ import { Key } from 'protractor';
 import { Observable, EMPTY, Subject, of } from 'rxjs';
 import { TodosService } from '../shared/todos.service';
 import { MatInput, MatDialog } from '@angular/material';
-import { filter, first, map, tap, switchMap, combineLatest } from 'rxjs/operators';
+import { filter, first, map, tap, switchMap, combineLatest, debounce, debounceTime } from 'rxjs/operators';
 import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
 import { ToolbarService } from '../toolbar/toolbar.service';
 import { Store } from '@ngrx/store';
@@ -39,6 +39,9 @@ export class TodoListsComponent implements OnInit {
   self: Todo;
   parent: Todo;
 
+  selfName: string;
+  private updatedSelfName = new Subject<string>();
+
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -51,11 +54,25 @@ export class TodoListsComponent implements OnInit {
     this.toolbarService.setTitle('Manage Lists');
 
     this.children = this.store.select(fromTodoLists.selectChildren);
-    this.store.select(fromTodoLists.selectSelf).subscribe(x => this.self = x);
+    this.store.select(fromTodoLists.selectSelf).subscribe(x => {
+      this.self = x;
+      if (this.self && !this.selfName) {
+        this.selfName = this.self.name;
+      }
+    });
     this.store.select(fromTodoLists.selectParent).subscribe(x => this.parent = x);
 
     this.children.subscribe(x => {
       this.isListEmpty = !x || x.length === 0;
+    });
+
+    this.updatedSelfName.pipe(debounceTime(500)).subscribe(x => {
+      const updatedTodo = {
+        ...this.self,
+        name: x
+      };
+
+      this.upsertTodo(updatedTodo);
     });
   }
 
@@ -91,6 +108,10 @@ export class TodoListsComponent implements OnInit {
     }
 
     this.todosService.copy(this.self);
+  }
+
+  updateName(value: string): void {
+    this.updatedSelfName.next(value);
   }
 
   /*nextList(): void {

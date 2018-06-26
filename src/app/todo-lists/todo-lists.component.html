@@ -10,7 +10,7 @@
   <div fxLayout="column" fxLayout.xs="column" class="todo-metadata">
     <div fxLayout="row" fxLayout.xs="column" *ngIf="self">
       <mat-form-field fxFlex>
-        <input matInput placeholder="Name" [value]="self.name">
+        <input matInput placeholder="Name" [value]="selfName" (keyup)="updateName($event.target.value)">
       </mat-form-field>
       <mat-form-field>
         <input matInput [matDatepicker]="dp3" placeholder="Due at" [value]="self.dueDate" (dateChange)="changeDate($event.value)">
