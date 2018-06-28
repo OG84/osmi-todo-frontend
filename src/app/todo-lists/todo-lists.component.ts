@@ -1,25 +1,20 @@
 import {
   Component,
   OnInit,
-  Input,
-  HostListener,
-  ViewChild,
-  ElementRef
 } from '@angular/core';
 import { Todo } from '../shared/todo.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Key } from 'protractor';
-import { Observable, EMPTY, Subject, of } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { TodosService } from '../shared/todos.service';
-import { MatInput, MatDialog } from '@angular/material';
-import { filter, first, map, tap, switchMap, combineLatest, debounce, debounceTime } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
+import {
+  debounceTime
+} from 'rxjs/operators';
 import { EnterNameDialogComponent } from './enter-name-dialog/enter-name-dialog.component';
 import { ToolbarService } from '../toolbar/toolbar.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app-state.model';
-import { ListInputValueChanged } from '../shared/todos.actions';
 import * as fromTodoLists from './todo-lists.selectors';
-import * as moment from 'moment';
 import { Moment } from 'moment';
 
 @Component({
@@ -43,8 +38,6 @@ export class TodoListsComponent implements OnInit {
   private updatedSelfName = new Subject<string>();
 
   constructor(
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
     private readonly todosService: TodosService,
     private readonly dialog: MatDialog,
     private readonly toolbarService: ToolbarService,
@@ -56,7 +49,7 @@ export class TodoListsComponent implements OnInit {
     this.children = this.store.select(fromTodoLists.selectChildren);
     this.store.select(fromTodoLists.selectSelf).subscribe(x => {
       this.self = x;
-      if (this.self && !this.selfName) {
+      if (this.self) {
         this.selfName = this.self.name;
       }
     });
