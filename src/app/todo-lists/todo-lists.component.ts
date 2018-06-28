@@ -49,9 +49,7 @@ export class TodoListsComponent implements OnInit {
     this.children = this.store.select(fromTodoLists.selectChildren);
     this.store.select(fromTodoLists.selectSelf).subscribe(x => {
       this.self = x;
-      if (this.self) {
-        this.selfName = this.self.name;
-      }
+      this.selfName = this.self ? this.self.name : null;
     });
     this.store.select(fromTodoLists.selectParent).subscribe(x => this.parent = x);
 
