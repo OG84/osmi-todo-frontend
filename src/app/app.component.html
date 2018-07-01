@@ -3,10 +3,14 @@
     <button mat-icon-button (click)="sidenav.toggle()" fxHide.gt-sm>
       <mat-icon>menu</mat-icon>
     </button>
-    <div class="osmi-todo-toolbar-title" fxLayoutAlign="start center" fxFlex>
-      <img src="/assets/thb-logo.png" alt="THB" fxHide.xs>
-      <span fxFlex>Thodo</span>
-      <span>v0.07</span>
+    <div class="osmi-todo-toolbar-title" fxLayout="row" fxFlex>
+      <div fxHide.lt-lg fxFlex="25%"></div>
+      <div fxLayoutAlign="start center" fxFlex>
+        <img src="/assets/thb-logo.png" alt="THB" fxHide.xs>
+        <span fxFlex>Thodo</span>
+        <span>v0.07</span>
+      </div>
+      <div fxHide.lt-md fxFlex="25%"></div>
     </div>
   </mat-toolbar>
   <mat-sidenav-container>
@@ -21,11 +25,15 @@
       <button mat-button color="primary" (click)="sidenav.toggle()" *ngIf="!sidenav.opened" fxHide.lt-sm>
         <mat-icon>arrow_right</mat-icon> Open menu</button>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content fxLayout="row">
       <!-- [@routerTransition]="getState(o)"-->
-      <main>
+      <aside fxHide.lt-lg fxFlex="25%"></aside>
+      <main fxFlex>
         <router-outlet #o="outlet"></router-outlet>
       </main>
+      <aside fxHide.lt-md fxFlex="25%" fxLayoutAlign="center start">
+        <img [src]="qrCodeSvg">
+      </aside>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

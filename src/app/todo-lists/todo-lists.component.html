@@ -18,10 +18,6 @@
         <mat-datepicker #dp3 disabled="false"></mat-datepicker>
       </mat-form-field>
     </div>
-
-    <mat-chip-list *ngIf="self?.dueDate">
-      <mat-chip>due {{self.dueDate | moment}}</mat-chip>
-    </mat-chip-list>
   </div>
   <div fxLayout="column" class="todo-subtasks">
     <div *ngIf="self" class="todo-heading">Sub tasks</div>

@@ -1,7 +1,7 @@
 :host {
     main {
-        max-width: 800px;
-        margin: auto;
+        //max-width: 800px;
+        //margin: auto;
     }
 
     mat-sidenav {
@@ -23,9 +23,6 @@
         padding: 0 40px 0 20px;
 
         .osmi-todo-toolbar-title {
-            max-width: 800px;
-            margin: auto;
-
             img {
                 width: 40px;
                 margin: 0 10px 0 0;
