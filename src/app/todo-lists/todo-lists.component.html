@@ -1,6 +1,6 @@
 <div fxLayout="column">
   <div class="todo-primary-actions">
-    <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?._id]" *ngIf="parent">
+    <button mat-stroked-button color="primary" [routerLink]="['/lists', parent?.id]" *ngIf="parent">
       <mat-icon>arrow_left</mat-icon> Back to {{parent?.name}}</button>
     <button mat-stroked-button color="primary" [routerLink]="['/lists']" *ngIf="self && !parent">
       <mat-icon>arrow_left</mat-icon> Back to overview</button>
@@ -20,7 +20,7 @@
     </div>
 
     <mat-chip-list *ngIf="self?.dueDate">
-      <mat-chip>due {{self.dueDate | momentFromNow}}</mat-chip>
+      <mat-chip>due {{self.dueDate | moment}}</mat-chip>
     </mat-chip-list>
   </div>
   <div fxLayout="column" class="todo-subtasks">

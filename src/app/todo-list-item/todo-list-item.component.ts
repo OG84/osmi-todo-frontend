@@ -66,7 +66,7 @@ export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
     const updatedTodo: Todo = {
       ...this.todo,
       name: this.name,
-      dueDate: this.dueDate ? this.dueDate.toString() : null
+      dueDate: this.dueDate ? this.dueDate.valueOf() : moment().utc().valueOf()
     };
 
     this.updated.emit(updatedTodo);

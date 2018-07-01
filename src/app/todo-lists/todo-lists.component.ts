@@ -15,6 +15,7 @@ import { ToolbarService } from '../toolbar/toolbar.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app-state.model';
 import * as fromTodoLists from './todo-lists.selectors';
+import * as moment from 'moment';
 import { Moment } from 'moment';
 
 @Component({
@@ -78,7 +79,7 @@ export class TodoListsComponent implements OnInit {
   changeDate(_moment: Moment) {
     this.todosService.upsert({
       ...this.self,
-      dueDate: _moment ? _moment.toString() : null
+      dueDate: _moment ? _moment.valueOf() : moment().utc().valueOf()
     });
   }
 
@@ -88,7 +89,7 @@ export class TodoListsComponent implements OnInit {
       if (!dialogResult) {
         return;
       }
-      const newTodo: Todo = { name: dialogResult.name, parentId: this.self ? this.self._id : null };
+      const newTodo: Todo = { name: dialogResult.name, parentId: this.self ? this.self.id : null };
       this.todosService.upsert(newTodo);
     });
   }

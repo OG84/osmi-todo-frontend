@@ -4,7 +4,7 @@ import * as moment from 'moment';
 @Pipe({ name: 'moment' })
 export class MomentPipe implements PipeTransform {
   transform(value: any, ...args: any[]) {
-    return moment(value).format('dddd, MMMM Do YYYY, h:mm:ss a');
+    return moment(value).format('dddd, MMMM Do YYYY');
   }
 }
 

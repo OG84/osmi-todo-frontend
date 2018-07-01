@@ -32,7 +32,7 @@ export class TodosService {
 
   copy(todo: Todo): void {
     const action: fromTodos.ClipboardAction = {
-      todoId: todo._id,
+      todoId: todo.id,
       todoName: todo.name,
       type: ClipboardActionType.COPY
     };
@@ -41,7 +41,7 @@ export class TodosService {
 
   cut(todo: Todo): void {
     const action: fromTodos.ClipboardAction = {
-      todoId: todo._id,
+      todoId: todo.id,
       todoName: todo.name,
       type: ClipboardActionType.CUT
     };

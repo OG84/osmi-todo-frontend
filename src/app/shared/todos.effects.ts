@@ -53,8 +53,8 @@ export class TodosEffects {
       }
 
       let apiUpsert = this.http.post<Todo>(createNewTodoUrl, action.todo);
-      if (action.todo._id) {
-        const updateTodoUrl = `${environment.apiBasePath}todos/${action.todo._id}`;
+      if (action.todo.id) {
+        const updateTodoUrl = `${environment.apiBasePath}todos/${action.todo.id}`;
         apiUpsert = this.http.put<Todo>(updateTodoUrl, action.todo);
       }
 
@@ -86,9 +86,9 @@ export class TodosEffects {
     ofType(TodosActionTypes.DELETE),
     mergeMap((action: Delete) => {
       return this.http.delete<Todo>(
-        `${environment.apiBasePath}todos/${action.todo._id}`).pipe(
-          map(() => new DeleteSuccess(action.todo._id)),
-          catchError(() => of(new DeleteFailure(action.todo._id)))
+        `${environment.apiBasePath}todos/${action.todo.id}`).pipe(
+          map(() => new DeleteSuccess(action.todo.id)),
+          catchError(() => of(new DeleteFailure(action.todo.id)))
         );
     })
   );
@@ -107,7 +107,7 @@ export class TodosEffects {
           const _todo = {
             ...todo,
             // no id = api creates new todo (copy), with id = api updates todo (cut)
-            _id: action.clipboardAction.type === ClipboardActionType.COPY ? null : todo._id,
+            id: action.clipboardAction.type === ClipboardActionType.COPY ? null : todo.id,
             parentId: parentTodoId,
             name: action.clipboardAction.type === ClipboardActionType.COPY ? `${todo.name} Kopie` : todo.name,
             dueDate: parentTodo ? parentTodo.dueDate : todo.dueDate

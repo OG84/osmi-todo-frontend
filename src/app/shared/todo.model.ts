@@ -1,7 +1,7 @@
 export interface Todo {
-  _id?: string;
+  id?: string;
   parentId?: string;
   name: string;
-  dueDate?: string;
+  dueDate?: number;
   isSelected?: boolean;
 }

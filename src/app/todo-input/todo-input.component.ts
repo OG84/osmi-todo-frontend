@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { TodosService } from 'src/app/shared/todos.service';
 import { Todo } from 'src/app/shared/todo.model';
 import * as chrono from 'chrono-node';
+import * as moment from 'moment';
 
 @Component({
   selector: 'osmi-todo-input',
@@ -53,8 +54,8 @@ export class TodoInputComponent implements OnInit {
 
     const newTodo: Todo = {
       name: newTodoName,
-      parentId: this.parentTodo ? this.parentTodo._id : null,
-      dueDate: chronoDate ? chronoDate.toUTCString() : null
+      parentId: this.parentTodo ? this.parentTodo.id : null,
+      dueDate: chronoDate ? moment(chronoDate).valueOf() : moment().utc().valueOf()
     };
     this.todosService.upsert(newTodo);
   }
