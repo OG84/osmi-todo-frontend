@@ -109,7 +109,7 @@ export class TodosEffects {
             // no id = api creates new todo (copy), with id = api updates todo (cut)
             id: action.clipboardAction.type === ClipboardActionType.COPY ? null : todo.id,
             parentId: parentTodoId,
-            name: action.clipboardAction.type === ClipboardActionType.COPY ? `${todo.name} Kopie` : todo.name,
+            name: todo.name,
             dueDate: parentTodo ? parentTodo.dueDate : todo.dueDate
           };
 
