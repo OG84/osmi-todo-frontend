@@ -1,4 +1,16 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef, QueryList, ViewChildren, AfterViewInit, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  ViewChild,
+  ElementRef,
+  QueryList,
+  ViewChildren,
+  AfterViewInit,
+  Output,
+  HostListener,
+  HostBinding
+} from '@angular/core';
 import { Todo } from '../shared/todo.model';
 import { Input } from '@angular/core';
 import { TodosService } from '../shared/todos.service';
@@ -7,6 +19,7 @@ import { timer } from 'rxjs';
 import { EventEmitter } from '@angular/core';
 import { Moment } from 'moment';
 import * as moment from 'moment';
+import { DropType } from '../todo-lists/todo-lists.actions';
 
 @Component({
   selector: 'osmi-todo-list-item',
@@ -31,7 +44,11 @@ export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChildren('nameInput')
   nameInputs: QueryList<ElementRef>;
 
-  constructor(private readonly todosService: TodosService) { }
+  isDraggedBefore = false;
+  isDraggedAfter = false;
+
+  constructor(
+    private readonly todosService: TodosService) { }
 
   ngOnInit() {
 
@@ -83,5 +100,55 @@ export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
 
   cut(): void {
     this.todosService.cut(this.todo);
+  }
+
+  @HostListener('dragstart', ['$event'])
+  dragStart(event: DragEvent): void {
+    event.dataTransfer.setData('todoId', this.todo.id);
+  }
+
+  @HostListener('dragover', ['$event'])
+  dragOver(event: MouseEvent): void {
+    const target = event.currentTarget as HTMLElement;
+    const clientRect = target.getBoundingClientRect();
+    const yTop = clientRect.top;
+    const yCenter = clientRect.top + clientRect.height / 2;
+    const yBottom = clientRect.top + clientRect.height;
+
+    this.isDraggedBefore = false;
+    this.isDraggedAfter = false;
+
+    if (event.clientY >= yTop && event.clientY < yCenter) {
+      this.isDraggedBefore = true;
+      this.isDraggedAfter = false;
+      event.preventDefault();
+      return;
+    }
+
+    if (event.clientY >= yCenter && event.clientY < yBottom) {
+      this.isDraggedBefore = false;
+      this.isDraggedAfter = true;
+      event.preventDefault();
+    }
+  }
+
+  @HostListener('drop', ['$event'])
+  drop(event: DragEvent): void {
+    if (!this.isDraggedAfter && !this.isDraggedBefore) {
+      return;
+    }
+
+    event.preventDefault();
+    const dragStartTodoId = event.dataTransfer.getData('todoId');
+    this.todosService.drop(dragStartTodoId, this.todo, this.isDraggedAfter ? DropType.AFTER : DropType.BEFORE);
+
+    this.isDraggedBefore = false;
+    this.isDraggedAfter = false;
+  }
+
+  @HostListener('dragleave', ['$event'])
+  dragLeave(): void {
+    this.isDraggedBefore = false;
+    this.isDraggedAfter = false;
   }
 }

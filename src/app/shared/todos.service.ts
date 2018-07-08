@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { skip, first } from 'rxjs/operators';
 import { ClipboardActionType } from './todos.actions';
+import { DropType, Drop } from 'src/app/todo-lists/todo-lists.actions';
 
 @Injectable()
 export class TodosService {
@@ -66,5 +67,9 @@ export class TodosService {
 
   updateListInputValue(value: string): void {
     this.store.dispatch(new fromTodos.ListInputValueChanged(value));
+  }
+
+  drop(dragStartId: string, dropTarget: Todo, type: DropType): void {
+    this.store.dispatch(new Drop(dragStartId, dropTarget, type));
   }
 }

@@ -4,4 +4,5 @@ export interface Todo {
   name: string;
   dueDate?: number;
   isSelected?: boolean;
+  prio?: number;
 }

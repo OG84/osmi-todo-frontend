@@ -1,4 +1,9 @@
-<div class="osmi-todo-list" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+<div class="osmi-todo-list" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" draggable="true"
+  [class.dragged-before]="isDraggedBefore" [class.dragged-after]="isDraggedAfter">
+  <div class="drop-arrow top-left" *ngIf="isDraggedBefore"></div>
+  <div class="drop-arrow top-right" *ngIf="isDraggedBefore"></div>
+  <div class="drop-arrow bottom-left" *ngIf="isDraggedAfter"></div>
+  <div class="drop-arrow bottom-right" *ngIf="isDraggedAfter"></div>
   <div fxLayout="row" fxLayout.xs="column" fxFlex *ngIf="isEditing">
     <mat-form-field fxFlex>
       <input #nameInput matInput placeholder="Name of the list" [(ngModel)]="name" (keyup.enter)="updateList()" autofocus>
@@ -10,12 +15,14 @@
     </mat-form-field>
   </div>
 
-  <div fxLayout="row" fxLayout.xs="column" fxFlex *ngIf="!isEditing" [routerLink]="['/lists', todo.id]">
+  <div fxLayout="row" fxLayout.xs="column" fxFlex *ngIf="!isEditing" [routerLink]="['/lists', todo.id]" fxLayoutAlign="start center">
+    <mat-icon class="todo-drag">menu</mat-icon>
     <div fxLayout="row" fxFlex>
-      <div fxFlex>{{todo?.name}}</div>
+      <div fxFlex>{{todo?.name}} {{todo?.prio}}</div>
     </div>
     <mat-chip-list *ngIf="todo.dueDate" fxHide.xs>
-      <mat-chip><mat-icon color="primary" class="todo-important" *ngIf="isImportant" matTooltip="Less than 24 hours">priority_high</mat-icon> {{todo.dueDate | moment}}</mat-chip>
+      <mat-chip>
+        <mat-icon color="primary" class="todo-important" *ngIf="isImportant" matTooltip="Less than 24 hours">priority_high</mat-icon> {{todo.dueDate | moment}}</mat-chip>
     </mat-chip-list>
     <div class="todo-duedate" *ngIf="todo.dueDate" fxHide.gt-xs>due {{todo.dueDate | moment}}</div>
   </div>

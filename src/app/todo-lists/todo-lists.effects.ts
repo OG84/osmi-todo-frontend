@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Store, Action } from '@ngrx/store';
 import { AppState } from 'src/app/app-state.model';
 import { Observable, of } from 'rxjs';
-import { TodoListsAction, TodoListsActionTypes } from 'src/app/todo-lists/todo-lists.actions';
-import { map, tap, filter, switchMap, catchError, first } from 'rxjs/operators';
+import { TodoListsAction, TodoListsActionTypes, DropType } from 'src/app/todo-lists/todo-lists.actions';
+import { map, tap, filter, switchMap, catchError, first, withLatestFrom } from 'rxjs/operators';
 import * as fromTodoLists from './todo-lists.actions';
 import * as fromTodos from '../shared/todos.actions';
 import { Todo } from 'src/app/shared/todo.model';
@@ -80,12 +80,33 @@ export class TodoListsEffects {
   );
 
   @Effect({ dispatch: false })
-  upsertOrDelete = this.actions.pipe(
+  upsertOrDeleteSuccess = this.actions.pipe(
     ofType(fromTodos.TodosActionTypes.UPSERT_SUCCESS, fromTodos.TodosActionTypes.DELETE_SUCCESS),
     switchMap(x => this.store.select(selectRouterParams).pipe(first())),
     tap(params => {
       const todoId = params['todoId'];
       this.reloadSelfAndChildren(todoId);
+    })
+  );
+
+  @Effect()
+  drop = this.actions.pipe(
+    ofType<fromTodoLists.Drop>(TodoListsActionTypes.DROP),
+    switchMap(x => this.http.get<Todo>(`${environment.apiBasePath}todos/${x.dragStartTodoId}`).pipe(
+      map(todo => {
+        return {
+          dragStartTodo: todo,
+          action: x
+        };
+      })
+    )),
+    map(x => {
+      const newTodo: Todo = {
+        ...x.dragStartTodo,
+        prio: x.action.dropType === DropType.BEFORE ? x.action.dropTarget.prio - 1 : x.action.dropTarget.prio + 1
+      };
+
+      return new fromTodos.Upsert(newTodo);
     })
   );
 

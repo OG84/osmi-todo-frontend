@@ -4,6 +4,10 @@ import { TodosService } from 'src/app/shared/todos.service';
 import { Todo } from 'src/app/shared/todo.model';
 import * as chrono from 'chrono-node';
 import * as moment from 'moment';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app-state.model';
+import { selectChildren } from '../todo-lists/todo-lists.selectors';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'osmi-todo-input',
@@ -20,7 +24,9 @@ export class TodoInputComponent implements OnInit {
 
   chronoDate: string;
 
-  constructor(private readonly todosService: TodosService) { }
+  constructor(
+    private readonly todosService: TodosService,
+    private readonly store: Store<AppState>) { }
 
   ngOnInit() { }
 
@@ -52,11 +58,14 @@ export class TodoInputComponent implements OnInit {
       return;
     }
 
-    const newTodo: Todo = {
-      name: newTodoName,
-      parentId: this.parentTodo ? this.parentTodo.id : null,
-      dueDate: chronoDate ? moment(chronoDate).valueOf() : moment().utc().valueOf()
-    };
-    this.todosService.upsert(newTodo);
+    this.store.select(selectChildren).pipe(first()).subscribe(children => {
+      const newTodo: Todo = {
+        name: newTodoName,
+        parentId: this.parentTodo ? this.parentTodo.id : null,
+        dueDate: chronoDate ? moment(chronoDate).valueOf() : moment().utc().valueOf(),
+        prio: children.length
+      };
+      this.todosService.upsert(newTodo);
+    });
   }
 }

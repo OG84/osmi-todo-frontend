@@ -10,8 +10,14 @@ export enum TodoListsActionTypes {
   FETCH_PARENT_FAILURE = '[todo lists] fetch parent failure',
   FETCH_CHILDREN = '[todo lists] fetch children',
   FETCH_CHILDREN_SUCCESS = '[todo lists] fetch children success',
-  FETCH_CHILDREN_FAILURE = '[todo lists] fetch cchildren failure',
-  SET_PARENT_TODO = '[todo lists] set parent todo'
+  FETCH_CHILDREN_FAILURE = '[todo lists] fetch children failure',
+  SET_PARENT_TODO = '[todo lists] set parent todo',
+  DROP = '[todo lists] drop',
+}
+
+export enum DropType {
+  BEFORE,
+  AFTER
 }
 
 export class FetchChildren implements Action {
@@ -68,6 +74,15 @@ export class FetchParentFailure implements Action {
   constructor(public todoId: string) { }
 }
 
+export class Drop implements Action {
+  readonly type = TodoListsActionTypes.DROP;
+
+  constructor(
+    public dragStartTodoId: string,
+    public dropTarget: Todo,
+    public dropType: DropType) { }
+}
+
 export type TodoListsAction = FetchSelf | FetchSelfSuccess | FetchSelfFailure |
   FetchParent | FetchParentSuccess | FetchParentFailure |
-  FetchChildren | FetchChildrenSuccess | FetchChildrenFailure;
+  FetchChildren | FetchChildrenSuccess | FetchChildrenFailure | Drop;
