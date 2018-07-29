@@ -103,7 +103,8 @@ export class TodoListsEffects {
     map(x => {
       const newTodo: Todo = {
         ...x.dragStartTodo,
-        prio: x.action.dropType === DropType.BEFORE ? x.action.dropTarget.prio - 1 : x.action.dropTarget.prio + 1
+        prio: x.action.dropType === DropType.BEFORE ? x.action.dropTarget.prio - 1 : x.action.dropTarget.prio + 1,
+        dropType: x.action.dropType
       };
 
       return new fromTodos.Upsert(newTodo);

@@ -4,8 +4,6 @@ import { ToolbarService } from './toolbar/toolbar.service';
 import { Observable } from 'rxjs';
 import { MatSidenav } from '@angular/material';
 import { routerTransition } from 'src/app/router-transistion.animation';
-import * as qrcode from 'qrcode';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'osmi-todo-root',
@@ -21,12 +19,10 @@ export class AppComponent implements OnInit {
   isMobile = false;
   sidenavMode = 'side';
   toolbarTitle: Observable<string>;
-  qrCodeSvg: SafeResourceUrl;
 
   constructor(
     public readonly media: ObservableMedia,
-    private readonly toolbarService: ToolbarService,
-    private readonly domSanitizer: DomSanitizer) {
+    private readonly toolbarService: ToolbarService) {
 
   }
 
@@ -36,21 +32,6 @@ export class AppComponent implements OnInit {
     this.media.subscribe(x => {
       this.isMobile = x.mqAlias === 'xs' || x.mqAlias === 'sm';
       this.sidenavMode = this.isMobile ? 'over' : 'side';
-    });
-
-    const options = {
-      color: {
-        dark: '#3f51b548',
-        light: '#fafafa'
-      }
-    };
-
-    qrcode.toString(window.location.href, options, (err, svgString) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      this.qrCodeSvg = this.domSanitizer.bypassSecurityTrustResourceUrl('data:image/svg+xml;charset=utf-8,' + svgString);
     });
   }
 
@@ -64,6 +45,6 @@ export class AppComponent implements OnInit {
 
   getState(outlet) {
     return new Date().getMilliseconds().toString();
-    //return outlet.activatedRouteData.state;
+    // return outlet.activatedRouteData.state;
   }
 }

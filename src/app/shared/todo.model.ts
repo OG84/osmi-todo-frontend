@@ -1,3 +1,5 @@
+import { DropType } from '../todo-lists/todo-lists.actions';
+
 export interface Todo {
   id?: string;
   parentId?: string;
@@ -5,4 +7,5 @@ export interface Todo {
   dueDate?: number;
   isSelected?: boolean;
   prio?: number;
+  dropType?: DropType;
 }

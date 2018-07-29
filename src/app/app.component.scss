@@ -42,4 +42,8 @@
             height: calc(100vh - 64px - 30px);
         }
     }
+
+    osmi-qr-code {
+        max-width: 160px;
+    }
 }

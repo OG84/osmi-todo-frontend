@@ -18,7 +18,7 @@
   <div fxLayout="row" fxLayout.xs="column" fxFlex *ngIf="!isEditing" [routerLink]="['/lists', todo.id]" fxLayoutAlign="start center">
     <mat-icon class="todo-drag">menu</mat-icon>
     <div fxLayout="row" fxFlex>
-      <div fxFlex>{{todo?.name}} {{todo?.prio}}</div>
+      <div fxFlex>{{todo?.name}}</div>
     </div>
     <mat-chip-list *ngIf="todo.dueDate" fxHide.xs>
       <mat-chip>

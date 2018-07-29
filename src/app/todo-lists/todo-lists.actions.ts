@@ -16,8 +16,8 @@ export enum TodoListsActionTypes {
 }
 
 export enum DropType {
-  BEFORE,
-  AFTER
+  BEFORE = 'BEFORE',
+  AFTER = 'AFTER'
 }
 
 export class FetchChildren implements Action {
