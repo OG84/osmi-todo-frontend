@@ -46,6 +46,7 @@ export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
 
   isDraggedBefore = false;
   isDraggedAfter = false;
+  isDragging = false;
 
   constructor(
     private readonly todosService: TodosService) { }
@@ -105,6 +106,7 @@ export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
   @HostListener('dragstart', ['$event'])
   dragStart(event: DragEvent): void {
     event.dataTransfer.setData('todoId', this.todo.id);
+    this.isDragging = true;
   }
 
   @HostListener('dragover', ['$event'])
@@ -134,6 +136,8 @@ export class TodoListItemComponent implements OnInit, OnChanges, AfterViewInit {
 
   @HostListener('drop', ['$event'])
   drop(event: DragEvent): void {
+    this.isDragging = false;
+
     if (!this.isDraggedAfter && !this.isDraggedBefore) {
       return;
     }
